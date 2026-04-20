@@ -42,6 +42,7 @@ public class UserApplicationMapper {
 
     final String userEmail = command.email();
 
+    // El comentario de la Regla 15 fue eliminado porque UserModel ya es inmutable.
     return new UserModel(
         new UserId(command.id()),
         new UserName(command.name()),
@@ -59,9 +60,10 @@ public class UserApplicationMapper {
     return new UserId(command.id());
   }
 
+  // SOLUCIÓN Regla 21: Se reemplazaron los retornos de -1 por excepciones claras.
   public static int roleToCode(final String role) {
     if (Objects.isNull(role) || role.isBlank()) {
-      return -1;
+      throw new IllegalArgumentException("El rol no puede ser nulo o vacio");
     }
     if ("ADMIN".equalsIgnoreCase(role)) {
       return 1;
@@ -70,6 +72,6 @@ public class UserApplicationMapper {
     } else if ("REVIEWER".equalsIgnoreCase(role)) {
       return 3;
     }
-    return -1;
+    throw new IllegalArgumentException("Rol desconocido: " + role);
   }
 }

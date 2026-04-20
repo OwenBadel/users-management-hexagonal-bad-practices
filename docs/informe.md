@@ -30,6 +30,16 @@
 * **Solución:** Se unificaron las variables bajo el nombre `userEmail` para mantener la consistencia semántica en toda la clase.
 
 
+## Regla 15 - 
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
+* **Problema:** El código contenía advertencias sobre el "efecto cascada" y la mutabilidad de `UserModel`, lo cual generaba ruido visual y confusión dado que el modelo ya había sido corregido.
+* **Solución:** Se limpiaron los comentarios obsoletos, ya que no había ningún @data
+
+
+
+
 
 
 
