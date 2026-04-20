@@ -8,5 +8,14 @@
 ### Violación 2
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/dto/query/GetUserByIdQuery.java`
 * **Problema:** Uso redundante de `@Builder` en un `record`.
-* **Solución:** Se eliminó la anotación y la importación de Lombok para mantener el diseño simple y nativo de Java 17.
+* **Solución:** Se eliminó la anotación y la importación de Lombok.
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/dto/query/GetUserByIdQuery.java`
+* **Problema:** La restricción `@NotBlank` tenía un mensaje de error personalizado (`message = ...`), lo cual va en contra de la directiva de usar los mensajes por defecto de Jakarta.
+* **Solución:** Se eliminó el parámetro `message` de la anotación, delegando la responsabilidad del texto al estándar de Jakarta Validation.
+
+
+
+
 

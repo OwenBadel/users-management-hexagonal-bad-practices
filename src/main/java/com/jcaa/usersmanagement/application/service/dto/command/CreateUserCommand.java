@@ -4,8 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-// SOLUCIÓN Regla 3: Se eliminó @Builder. Los records ya proporcionan 
-// constructores canónicos inmutables por defecto.
+
 public record CreateUserCommand(
     @NotBlank(message = "id must not be blank") String id,
     @NotBlank(message = "name must not be blank")
