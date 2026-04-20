@@ -1,3 +1,5 @@
+# REGLAS HEXAGONAL
+
 ## Regla 3: Lombok y validaciones
 
 ### Violación 1
@@ -14,6 +16,18 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/dto/query/GetUserByIdQuery.java`
 * **Problema:** La restricción `@NotBlank` tenía un mensaje de error personalizado (`message = ...`), lo cual va en contra de la directiva de usar los mensajes por defecto de Jakarta.
 * **Solución:** Se eliminó el parámetro `message` de la anotación, delegando la responsabilidad del texto al estándar de Jakarta Validation.
+
+
+
+
+# REGLAS CLEAN CODE
+
+## Regla 21: No usar códigos especiales de error
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
+* **Problema:** El método `roleToCode` devolvía `-1` para señalar errores, obligando a adivinar el significado de ese número mágico. Además, el archivo contenía comentarios sobre la mutabilidad del dominio que ya estaban obsoletos.
+* **Solución:** Se reemplazó el retorno de `-1` por el lanzamiento de `IllegalArgumentException` con mensajes claros. También se eliminó la advertencia de la Regla 15, ya que `UserModel` es inmutable por diseño.
 
 
 ## Regla 24: Consistencia Semántica
@@ -37,13 +51,11 @@
 * **Problema:** El código contenía advertencias sobre el "efecto cascada" y la mutabilidad de `UserModel`, lo cual generaba ruido visual y confusión dado que el modelo ya había sido corregido.
 * **Solución:** Se limpiaron los comentarios obsoletos, ya que no había ningún @data
 
-
-
-## Regla 21: No usar códigos especiales de error
+## Regla 10 - Eliminar comentarios redundantes
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
-* **Problema:** El método `roleToCode` devolvía `-1` para señalar errores, obligando a adivinar el significado de ese número mágico. Además, el archivo contenía comentarios sobre la mutabilidad del dominio que ya estaban obsoletos.
-* **Solución:** Se reemplazó el retorno de `-1` por el lanzamiento de `IllegalArgumentException` con mensajes claros. También se eliminó la advertencia de la Regla 15, ya que `UserModel` es inmutable por diseño.
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
+* **Problema:** El método `execute` estaba plagado de comentarios que explicaban lo obvio (ej. `// guardar el usuario` antes de un método `save`). 
+* **Solución:** Se eliminaron todos los comentarios redundantes para reducir el ruido visual y forzar a que el código se explique por sí mismo mediante buenos nombres de variables y métodos.
 
 

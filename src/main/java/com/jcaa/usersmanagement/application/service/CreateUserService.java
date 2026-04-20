@@ -50,8 +50,7 @@ public final class CreateUserService implements CreateUserUseCase {
 
     log.info("Creando usuario con email=" + command.email() + ", nombre=" + command.name());
 
-    // Clean Code - Regla 10: comentario redundante — el código siguiente ya dice lo mismo.
-    // verificar si el email ya existe en la base de datos
+  
     final UserEmail email = new UserEmail(command.email());
     if (getUserByEmailPort.getByEmail(email).isPresent()) {
       throw UserAlreadyExistsException.becauseEmailAlreadyExists(email.value());
@@ -68,12 +67,10 @@ public final class CreateUserService implements CreateUserUseCase {
         UserRole.fromString(command.role()),
         UserStatus.PENDING);
 
-    // Clean Code - Regla 10: comentario que explica lo obvio — no aporta valor.
-    // guardar el usuario en la base de datos
+ 
     final UserModel savedUser = saveUserPort.save(userToSave);
 
-    // Clean Code - Regla 10: otro comentario redundante.
-    // enviar notificacion de bienvenida al usuario creado
+
     emailNotificationService.notifyUserCreated(savedUser, command.password());
 
     // retornar el usuario guardado
