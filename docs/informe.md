@@ -16,6 +16,14 @@
 * **Solución:** Se eliminó el parámetro `message` de la anotación, delegando la responsabilidad del texto al estándar de Jakarta Validation.
 
 
+## Regla 24: Consistencia Semántica
+### Violación 1
+* **Archivo:** `UserApplicationMapper.java`
+* **Problema:** Uso de nombres diferentes (`correo` vs `correoElectronico`) para el mismo concepto.
+* **Solución:** Se unificó el nombre de la variable en todos los métodos de la clase.
+
+
+
 
 
 
