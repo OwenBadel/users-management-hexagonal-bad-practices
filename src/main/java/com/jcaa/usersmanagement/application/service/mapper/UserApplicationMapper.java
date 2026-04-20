@@ -18,14 +18,14 @@ public class UserApplicationMapper {
   public static UserModel fromCreateCommandToModel(final CreateUserCommand command) {
     final String userId    = command.id();
     final String userName  = command.name();
-    final String correoElectronico = command.email();
+    final String userEmail = command.email();
     final String userPass  = command.password();
     final String userRole  = command.role();
 
     return UserModel.create(
         new UserId(userId),
         new UserName(userName),
-        new UserEmail(correoElectronico),
+        new UserEmail(userEmail),
         UserPassword.fromPlainText(userPass),
         UserRole.fromString(userRole));
   }
@@ -40,12 +40,12 @@ public class UserApplicationMapper {
       passwordToUse = UserPassword.fromPlainText(command.password());
     }
 
-    final String correoElectronico = command.email();
+    final String userEmail = command.email();
 
     return new UserModel(
         new UserId(command.id()),
         new UserName(command.name()),
-        new UserEmail(correoElectronico),
+        new UserEmail(userEmail),
         passwordToUse,
         UserRole.fromString(command.role()),
         UserStatus.fromString(command.status()));

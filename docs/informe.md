@@ -17,11 +17,17 @@
 
 
 ## Regla 24: Consistencia Semántica
+
 ### Violación 1
 * **Archivo:** `UserApplicationMapper.java`
 * **Problema:** Uso de nombres diferentes (`correo` vs `correoElectronico`) para el mismo concepto.
 * **Solución:** Se unificó el nombre de la variable en todos los métodos de la clase.
 
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
+* **Problema:** El mismo concepto (email del usuario) recibía múltiples nombres sin justificación en fromUpdateCommandToModel.
+* **Solución:** Se unificaron las variables bajo el nombre `userEmail` para mantener la consistencia semántica en toda la clase.
 
 
 
