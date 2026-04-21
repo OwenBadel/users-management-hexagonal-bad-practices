@@ -27,7 +27,6 @@ public final class CreateUserService implements CreateUserUseCase {
 
     @Override
     public UserModel execute(final CreateUserCommand command) {
-        // SOLUCIÓN Reglas 1 y 2: El método es corto y solo orquestas pasos de alto nivel.
         validateCommand(command);
         
         log.info("Iniciando proceso de creación de usuario");
@@ -37,7 +36,6 @@ public final class CreateUserService implements CreateUserUseCase {
         return createAndNotify(command);
     }
 
-    // Método extraído para cumplir con la Regla 1 (Separar persistencia/notificación)
     private UserModel createAndNotify(CreateUserCommand command) {
         final UserModel userToSave = UserApplicationMapper.fromCreateCommandToModel(command);
         final UserModel savedUser = saveUserPort.save(userToSave);

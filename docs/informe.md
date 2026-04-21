@@ -22,6 +22,15 @@
 * **Problema:** El método `execute` mezclaba lógica de orquestación (negocio) con detalles técnicos de construcción de objetos de dominio (instanciación de Value Objects).
 * **Solución:** Se delegó la creación del `UserModel` al `UserApplicationMapper`. Esto permite que el servicio opere exclusivamente en un nivel de abstracción de alto nivel, cumpliendo con la separación de responsabilidades.
 
+## Regla 6: Excepciones, logging y telemetría
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/DeleteUserService.java`
+* **Problema:** Uso de un `Logger` manual (`java.util.logging.Logger`) en lugar de la anotación `@Log` de Lombok, rompiendo la consistencia del proyecto.
+* **Solución:** Se eliminó la declaración manual y se integró la anotación `@Log`, estandarizando el mecanismo de logging.
+
+
+
 
 
 # REGLAS CLEAN CODE
