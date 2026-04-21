@@ -94,4 +94,17 @@
 * **Solución:** Se fragmentó la lógica extrayendo el proceso de guardado y notificación al método privado `createAndNotify`. El método `execute` ahora es una función corta que cumple con una única responsabilidad: orquestar el flujo de creación.
 
 
+## Regla 25 y 26: Claridad sobre ingenio y Evitar sobrecompactación
+### Violación 1
+* **Archivo:** `EmailNotificationService.java`
+* **Problema:** Los métodos `notifyUser...` comprimían la carga de plantillas, renderización, construcción del destino y envío en una sola línea anidada.
+* **Solución:** Se descompactaron las expresiones en variables declarativas (`rawTemplate`, `htmlBody`, `destination`), priorizando la legibilidad paso a paso.
+
+## Regla 3 y 11: Niveles de abstracción y Evitar duplicación
+### Violación 1
+* **Archivo:** `EmailNotificationService.java`
+* **Problema:** La lógica de orquestación de correos estaba duplicada en dos métodos y mezclaba lógica de alto nivel con manipulación de strings de bajo nivel.
+* **Solución:** Se extrajo la orquestación al método privado `processAndSend`, centralizando el proceso y manteniendo un único nivel de abstracción por método.
+
+
 
