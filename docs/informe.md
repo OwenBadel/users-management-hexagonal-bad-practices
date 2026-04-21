@@ -74,4 +74,12 @@
 * **Solución:** Se extrajo la lógica a los métodos privados `validateCommand` y `ensureEmailIsNotRegistered`. Esto permite que el método `execute` sea autodocumentado, eliminando la necesidad de comentarios.
 
 
+## Regla 1 y 2: Una sola cosa por función y funciones cortas
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
+* **Problema:** El método `execute` realizaba múltiples tareas: validación, lógica de negocio, persistencia y notificaciones externas, resultando en una función extensa.
+* **Solución:** Se fragmentó la lógica extrayendo el proceso de guardado y notificación al método privado `createAndNotify`. El método `execute` ahora es una función corta que cumple con una única responsabilidad: orquestar el flujo de creación.
+
+
 
