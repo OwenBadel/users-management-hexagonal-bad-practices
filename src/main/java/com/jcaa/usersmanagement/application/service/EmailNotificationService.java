@@ -50,20 +50,12 @@ public final class EmailNotificationService {
   }
 
 
+
   private void processAndSend(UserModel user, String subject, String templateName, Map<String, String> tokens) {
     final String rawTemplate = loadTemplate(templateName);
     final String htmlBody = renderTemplate(rawTemplate, tokens);
     final EmailDestinationModel destination = buildDestination(user, subject, htmlBody);
     sendOrLog(destination);
-  }
-
-  public void sendNotificationWithFlag(
-      final UserModel user, final boolean includePassword, final String plainPassword) {
-    if (includePassword) {
-      notifyUserCreated(user, plainPassword);
-    } else {
-      notifyUserUpdated(user);
-    }
   }
 
   private static EmailDestinationModel buildDestination(

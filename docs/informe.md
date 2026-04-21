@@ -29,6 +29,8 @@
 * **Problema:** Uso de un `Logger` manual (`java.util.logging.Logger`) en lugar de la anotación `@Log` de Lombok, rompiendo la consistencia del proyecto.
 * **Solución:** Se eliminó la declaración manual y se integró la anotación `@Log`, estandarizando el mecanismo de logging.
 
+
+
 ### Violación 2
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/DeleteUserService.java`
 * **Problema:** Presencia de un bloque `try-catch` que captura excepciones genéricas sin lógica de recuperación, realizando un log redundante antes de relanzar la excepción.
@@ -105,6 +107,14 @@
 * **Archivo:** `EmailNotificationService.java`
 * **Problema:** La lógica de orquestación de correos estaba duplicada en dos métodos y mezclaba lógica de alto nivel con manipulación de strings de bajo nivel.
 * **Solución:** Se extrajo la orquestación al método privado `processAndSend`, centralizando el proceso y manteniendo un único nivel de abstracción por método.
+
+
+## Regla 6: Evitar parámetros booleanos de control (Clean Code)
+
+### Violación 1
+* **Archivo:** `EmailNotificationService.java`
+* **Problema:** El método `sendNotificationWithFlag` utilizaba un booleano (`includePassword`) para bifurcar el flujo de ejecución entre dos comportamientos distintos (creación vs actualización).
+* **Solución:** Se eliminó el método con el "Flag Argument". Ahora los consumidores de la clase deben invocar explícitamente `notifyUserCreated` o `notifyUserUpdated`, eliminando efectos secundarios y mejorando la claridad de la API.
 
 
 
