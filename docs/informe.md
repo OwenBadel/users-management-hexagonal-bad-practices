@@ -37,6 +37,12 @@
 * **Solución:** Se eliminó el bloque `try-catch`. Esto permite que las excepciones se propaguen limpiamente hacia la capa de infraestructura para ser procesadas por el manejador global de excepciones, reduciendo la complejidad del método.
 
 
+## Reglas 21 y 5: No usar códigos especiales de error y No retornar null
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/GetAllUsersService.java`
+* **Problema:** El método `execute` comprobaba si la lista devuelta por la base de datos estaba vacía y, de ser así, retornaba explícitamente `null`. Esto utiliza a `null` como un código especial para denotar ausencia (Regla 21) y viola la directiva de nunca retornar nulos en colecciones (Regla 5), obligando a los consumidores a implementar comprobaciones manuales para evitar excepciones.
+* **Solución:** Se eliminó la validación `isEmpty()` y el retorno de `null`. Ahora el método retorna directamente el resultado de `getAllUsersPort.getAll()`. Si no hay usuarios, devolverá una lista vacía, lo cual es semánticamente correcto y seguro de iterar.
 
 # REGLAS CLEAN CODE
 
