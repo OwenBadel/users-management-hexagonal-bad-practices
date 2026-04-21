@@ -17,6 +17,10 @@
 * **Problema:** La restricción `@NotBlank` tenía un mensaje de error personalizado (`message = ...`), lo cual va en contra de la directiva de usar los mensajes por defecto de Jakarta.
 * **Solución:** Se eliminó el parámetro `message` de la anotación, delegando la responsabilidad del texto al estándar de Jakarta Validation.
 
+### Violación 4 - Un solo nivel de abstracción por función
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
+* **Problema:** El método `execute` mezclaba lógica de orquestación (negocio) con detalles técnicos de construcción de objetos de dominio (instanciación de Value Objects).
+* **Solución:** Se delegó la creación del `UserModel` al `UserApplicationMapper`. Esto permite que el servicio opere exclusivamente en un nivel de abstracción de alto nivel, cumpliendo con la separación de responsabilidades.
 
 
 
@@ -44,6 +48,8 @@
 * **Solución:** Se unificaron las variables bajo el nombre `userEmail` para mantener la consistencia semántica en toda la clase.
 
 
+
+
 ## Regla 15 - Inmutabilidad como preferencia
 
 ### Violación 1
@@ -67,9 +73,5 @@
 * **Problema:** Uso de comentarios descriptivos (`// validar campos`, `// verificar si el email existe`) para compensar la falta de expresividad del código.
 * **Solución:** Se extrajo la lógica a los métodos privados `validateCommand` y `ensureEmailIsNotRegistered`. Esto permite que el método `execute` sea autodocumentado, eliminando la necesidad de comentarios.
 
-## Regla 3: Un solo nivel de abstracción por función
 
-### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
-* **Problema:** El método `execute` mezclaba lógica de orquestación (negocio) con detalles técnicos de construcción de objetos de dominio (instanciación de Value Objects).
-* **Solución:** Se delegó la creación del `UserModel` al `UserApplicationMapper`. Esto permite que el servicio opere exclusivamente en un nivel de abstracción de alto nivel, cumpliendo con la separación de responsabilidades.
+
