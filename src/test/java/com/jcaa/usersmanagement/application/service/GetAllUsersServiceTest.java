@@ -19,11 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-/**
- * Pruebas unitarias para GetAllUsersService.
- * Valida la correcta recuperación de todos los usuarios registrados
- * y el manejo adecuado cuando el repositorio se encuentra vacío.
- */
+
 @DisplayName("GetAllUsersService")
 @ExtendWith(MockitoExtension.class)
 class GetAllUsersServiceTest {
@@ -40,7 +36,7 @@ class GetAllUsersServiceTest {
   @Test
   @DisplayName("execute() retorna la lista de usuarios del puerto")
   void shouldReturnUsersFromPort() {
-    // Arrange
+    
     final UserModel user =
         new UserModel(
             new UserId("u-001"),
@@ -51,10 +47,10 @@ class GetAllUsersServiceTest {
             UserStatus.ACTIVE);
     when(getAllUsersPort.getAll()).thenReturn(List.of(user));
     
-    // Act
+    
     final List<UserModel> result = service.execute();
     
-    // Assert
+    
     assertEquals(1, result.size());
     assertSame(user, result.get(0));
   }
@@ -62,13 +58,13 @@ class GetAllUsersServiceTest {
   @Test
   @DisplayName("execute() retorna una lista vacía cuando no hay usuarios")
   void shouldReturnEmptyListWhenNoUsersExist() {
-    // Arrange
+    
     when(getAllUsersPort.getAll()).thenReturn(List.of());
     
-    // Act
+   
     final List<UserModel> result = service.execute();
     
-    // Assert
+    
     assertNotNull(result);
     assertTrue(result.isEmpty());
   }
