@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
 
 @Log
 @RequiredArgsConstructor
@@ -49,13 +48,13 @@ public final class EmailNotificationService {
     processAndSend(user, SUBJECT_UPDATED, "user-updated.html", tokens);
   }
 
-
-
   private void processAndSend(UserModel user, String subject, String templateName, Map<String, String> tokens) {
     final String rawTemplate = loadTemplate(templateName);
     final String htmlBody = renderTemplate(rawTemplate, tokens);
     final EmailDestinationModel destination = buildDestination(user, subject, htmlBody);
-    sendOrLog(destination);
+    
+   
+    emailSenderPort.send(destination);
   }
 
   private static EmailDestinationModel buildDestination(
@@ -81,24 +80,12 @@ public final class EmailNotificationService {
     return getClass().getResourceAsStream(path);
   }
 
-  private String renderTemplate(String template, final Map<String, String> values) {
+  private static String renderTemplate(String template, final Map<String, String> values) {
     String result = template;
     for (final Map.Entry<String, String> tokenEntry : values.entrySet()) {
       final String token = "{{" + tokenEntry.getKey() + "}}";
       result = result.replace(token, tokenEntry.getValue());
     }
     return result;
-  }
-
-  private void sendOrLog(final EmailDestinationModel destination) {
-    try {
-      emailSenderPort.send(destination);
-    } catch (final EmailSenderException senderException) {
-      log.log(
-          Level.WARNING,
-          "[EmailNotificationService] No se pudo enviar correo a: {0}. Causa: {1}",
-          new Object[] {destination.getDestinationEmail(), senderException.getMessage()});
-      throw senderException;
-    }
   }
 }
