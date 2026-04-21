@@ -22,6 +22,12 @@
 * **Problema:** El método `execute` mezclaba lógica de orquestación (negocio) con detalles técnicos de construcción de objetos de dominio (instanciación de Value Objects).
 * **Solución:** Se delegó la creación del `UserModel` al `UserApplicationMapper`. Esto permite que el servicio opere exclusivamente en un nivel de abstracción de alto nivel, cumpliendo con la separación de responsabilidades.
 
+
+### Violación 5
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/GetUserByIdService.java`
+* **Problema:** La anotación `@Valid` estaba declarada como parámetro en la implementación del método sobrescrito (`@Override execute`). Según las especificaciones de Jakarta Validation y los principios de diseño de interfaces, las constraints de validación deben definirse en el contrato (el puerto de entrada o interfaz), no en la clase concreta que lo implementa.
+* **Solución:** Se eliminó la anotación `@Valid` y su importación de la clase concreta `GetUserByIdService`, dejando la firma limpia y cumpliendo con el estándar de declaración de validaciones.
+
 ## Regla 6: Excepciones, logging y telemetría
 
 ### Violación 1
