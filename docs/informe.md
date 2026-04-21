@@ -59,3 +59,10 @@
 * **Solución:** Se eliminaron todos los comentarios redundantes para reducir el ruido visual y forzar a que el código se explique por sí mismo mediante buenos nombres de variables y métodos.
 
 
+
+## Regla 9: Código expresivo antes que comentarios
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
+* **Problema:** Uso de comentarios descriptivos (`// validar campos`, `// verificar si el email existe`) para compensar la falta de expresividad del código.
+* **Solución:** Se extrajo la lógica a los métodos privados `validateCommand` y `ensureEmailIsNotRegistered`. Esto permite que el método `execute` sea autodocumentado, eliminando la necesidad de comentarios.
