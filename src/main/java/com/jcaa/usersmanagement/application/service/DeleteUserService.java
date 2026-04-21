@@ -26,15 +26,13 @@ public final class DeleteUserService implements DeleteUserUseCase {
     @Override
     public void execute(final DeleteUserCommand command) {
         
-        try {
+       
             validateCommand(command);
             final UserId userId = UserApplicationMapper.fromDeleteCommandToUserId(command);
             ensureUserExists(userId);
             deleteUserPort.delete(userId);
-        } catch (final Exception e) {
-            log.warning("Error al eliminar usuario: " + e.getMessage());
-            throw e;
-        }
+        
+        
     }
 
     private void validateCommand(final DeleteUserCommand command) {
