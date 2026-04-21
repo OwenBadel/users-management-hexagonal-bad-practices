@@ -4,14 +4,10 @@ import com.jcaa.usersmanagement.application.port.in.CreateUserUseCase;
 import com.jcaa.usersmanagement.application.port.out.GetUserByEmailPort;
 import com.jcaa.usersmanagement.application.port.out.SaveUserPort;
 import com.jcaa.usersmanagement.application.service.dto.command.CreateUserCommand;
-import com.jcaa.usersmanagement.domain.enums.UserRole;
-import com.jcaa.usersmanagement.domain.enums.UserStatus;
+import com.jcaa.usersmanagement.application.service.mapper.UserApplicationMapper;
 import com.jcaa.usersmanagement.domain.exception.UserAlreadyExistsException;
 import com.jcaa.usersmanagement.domain.model.UserModel;
 import com.jcaa.usersmanagement.domain.valueobject.UserEmail;
-import com.jcaa.usersmanagement.domain.valueobject.UserId;
-import com.jcaa.usersmanagement.domain.valueobject.UserName;
-import com.jcaa.usersmanagement.domain.valueobject.UserPassword;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -31,22 +27,14 @@ public final class CreateUserService implements CreateUserUseCase {
 
     @Override
     public UserModel execute(final CreateUserCommand command) {
-        // SOLUCIÓN Regla 9: El nombre del método sustituye al comentario "// validar campos".
         validateCommand(command);
 
-        log.info("Creando usuario con email=" + command.email() + ", nombre=" + command.name());
+        log.info("Iniciando proceso de creación de usuario");
 
-        // SOLUCIÓN Regla 9: El nombre del método sustituye al comentario "// verificar si el email existe".
         ensureEmailIsNotRegistered(command.email());
 
-        // Clean Code - Regla 3: (Se resolverá en la siguiente rama)
-        final UserModel userToSave = new UserModel(
-                new UserId(command.id()),
-                new UserName(command.name()),
-                new UserEmail(command.email()),
-                UserPassword.fromPlainText(command.password()),
-                UserRole.fromString(command.role()),
-                UserStatus.PENDING);
+
+        final UserModel userToSave = UserApplicationMapper.fromCreateCommandToModel(command);
 
         final UserModel savedUser = saveUserPort.save(userToSave);
 
@@ -55,7 +43,6 @@ public final class CreateUserService implements CreateUserUseCase {
         return savedUser;
     }
 
-    // Métodos extraídos para mejorar la expresividad (Regla 9)
     private void validateCommand(final CreateUserCommand command) {
         final Set<ConstraintViolation<CreateUserCommand>> violations = validator.validate(command);
         if (!violations.isEmpty()) {
