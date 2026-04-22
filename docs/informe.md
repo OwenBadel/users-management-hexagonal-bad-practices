@@ -90,10 +90,10 @@
 * **Problema:** Los métodos factory contenían strings hardcodeados directamente en los mensajes de error sin extraerlos a constantes nombradas, dificultando su mantenimiento y cambios futuros.
 * **Solución:** Se extrajeron los mensajes a constantes estáticas `SMTP_ERROR_MESSAGE` y `SEND_FAILED_MESSAGE` en la clase, permitiendo reutilizarlas y facilitar cambios centralizados.
 
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserPassword.java`
-* **Problema:** El código contenía magic numbers sin nombre descriptivo: `8` (longitud mínima de contraseña) y `12` (costo de BCrypt). Estos números mágicos requieren que el lector entienda el contexto para adivinar su significado, haciendo el código frágil y difícil de mantener.
-* **Solución:** Se extrajeron dos constantes estáticas con nombres descriptivos: `MINIMUM_LENGTH = 8` y `BCRYPT_COST = 12`. Ahora el código es autoexplicativo y facilita cambios futuros.
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserName.java`
+* **Problema:** El método `validateMinimumLength()` contenía un magic number `3` sin nombre descriptivo. Además, el canonical constructor usaba `if (value == null)` en lugar de `Objects.requireNonNull()`.
+* **Solución:** Se extrajo la constante `MINIMUM_LENGTH = 3` y se reemplazó la validación de nulidad manual por `Objects.requireNonNull()`, mejorando la legibilidad y siguiendo las convenciones estándar de Java.
 
 ## Regla 9: Código expresivo antes que comentarios
 
