@@ -86,11 +86,14 @@
 ## Regla 10 - Eliminar comentarios redundantes
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
-* **Problema:** El método `execute` estaba plagado de comentarios que explicaban lo obvio (ej. `// guardar el usuario` antes de un método `save`). 
-* **Solución:** Se eliminaron todos los comentarios redundantes para reducir el ruido visual y forzar a que el código se explique por sí mismo mediante buenos nombres de variables y métodos.
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/EmailSenderException.java`
+* **Problema:** Los métodos factory contenían strings hardcodeados directamente en los mensajes de error sin extraerlos a constantes nombradas, dificultando su mantenimiento y cambios futuros.
+* **Solución:** Se extrajeron los mensajes a constantes estáticas `SMTP_ERROR_MESSAGE` y `SEND_FAILED_MESSAGE` en la clase, permitiendo reutilizarlas y facilitar cambios centralizados.
 
-
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/ConsoleIO.java`
+* **Problema:** Los mensajes de error de validación estaban hardcodeados como strings literales dentro de los métodos `readRequired()` y `readInt()`, dificultando cambios futuros y violando el principio DRY si se necesitara reutilizar estos mensajes.
+* **Solución:** Se extrajeron los mensajes a constantes estáticas `BLANK_VALUE_ERROR` e `INVALID_NUMBER_ERROR` en la clase, permitiendo acceso centralizado y facilitando futuros cambios.
 
 ## Regla 9: Código expresivo antes que comentarios
 
