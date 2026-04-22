@@ -132,11 +132,9 @@
 ## Regla 4: Estilo y Naming
 
 ### Violación 1
-* **Archivo:** `EmailNotificationService.java`
-* **Problema:** El método privado `renderTemplate` actuaba como una función pura que no utilizaba el estado de la instancia, pero no estaba marcado como `static`.
-* **Solución:** Se añadió el modificador `static` a `renderTemplate` para indicar claramente su independencia del estado de la clase y adherirse a las convenciones de Clean Code en Java.
-
-
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/ConsoleIO.java`
+* **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
+* **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
