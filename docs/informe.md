@@ -144,3 +144,14 @@
 * **Archivo:** `EmailNotificationService.java`
 * **Problema:** El método `sendOrLog` prometía enviar o registrar un log, pero en la práctica lanzaba una excepción no declarada en su nombre, ocultando un efecto secundario importante al consumidor del método.
 * **Solución:** Se eliminó el método `sendOrLog` y su bloque `try-catch` redundante. Ahora el método invoca directamente a `emailSenderPort.send()`, dejando que la excepción de dominio fluya transparentemente si el envío falla.
+
+---
+
+# REGLAS HEXAGONAL (continuación)
+
+## Regla 2: Modelado y tipos
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/dto/UserResponse.java`
+* **Problema:** El DTO de respuesta usaba `@Data` de Lombok, generando setters públicos y haciendo el objeto mutable. Los DTOs de salida deben ser inmutables, impediendo que su estado sea modificado después de ser construido. Con `@Data` es posible hacer `response.setEmail("otro@email.com")` desde cualquier lugar, comprometiendo la integridad del objeto.
+* **Solución:** Se convirtió `UserResponse` de una clase con `@Data` a un Java `record`, que proporciona inmutabilidad total, genera automáticamente el constructor canónico, getters (sin prefijo "get"), `toString`, `equals` y `hashCode`. Los accesores en records usan notación sin prefijo: `response.id()` en lugar de `response.getId()`. Se actualizaron todas las referencias en `UserResponsePrinter.java` y en las pruebas de `UserControllerTest.java`.
