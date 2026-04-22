@@ -193,3 +193,10 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
 * **Problema:** El método `getStatusLabel()` utilizaba una cascada larga de `if/else if` para mapear estados de usuario a sus etiquetas de presentación. Esta estructura crece linealmente con cada nuevo estado agregado, es repetitiva, difícil de mantener, y viola la intención: solo necesita buscar un valor en una tabla.
 * **Solución:** Se reemplazó la cascada de condicionales por un `Map<String, String>` estático (`STATUS_LABELS`) que agrupa todos los estados y sus etiquetas. El método ahora usa `getOrDefault()` para buscar la etiqueta o retornar un valor por defecto. Agregar un nuevo estado es ahora trivial: solo añadir una entrada al mapa, sin modificar lógica condicional.
+
+## Regla 9: Arquitectura Hexagonal — Dependencias hacia el centro
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** En el método `createUser`, el entrypoint construía directamente un `CreateUserCommand` del dominio de aplicación sin pasar por el mapper. Esto acopla la capa de infraestructura directamente con los objetos de transferencia de datos de la capa de aplicación, saltándose la responsabilidad del mapper que es justamente traducir entre las peticiones externas y los comandos internos.
+* **Solución:** Se utilizó el método estático `toCreateCommand(request)` de la clase `UserDesktopMapper` para delegar la creación del comando. Se eliminaron los comentarios relativos a la violación, manteniendo la capa de entrada aislada de los detalles de estructuración interna del dominio.
