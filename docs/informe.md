@@ -79,9 +79,9 @@
 ## Regla 15 - Inmutabilidad como preferencia
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
-* **Problema:** El código contenía advertencias sobre el "efecto cascada" y la mutabilidad de `UserModel`, lo cual generaba ruido visual y confusión dado que el modelo ya había sido corregido.
-* **Solución:** Se limpiaron los comentarios obsoletos, ya que no había ningún @data
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/model/UserModel.java`
+* **Problema:** `UserModel` usaba `@Data` de Lombok junto con `@AllArgsConstructor`, lo cual generaba setters públicos para todos los campos. El modelo de dominio debe ser inmutable: los setters públicos permiten que cualquier clase modifique el estado sin pasar por invariantes ni reglas de negocio. Con `@Data`, cualquiera podría hacer `userModel.setStatus(BLOCKED)` desde fuera del dominio, rompiendo el encapsulamiento.
+* **Solución:** Se reemplazó `@Data + @AllArgsConstructor` por `@Value` de Lombok, que automáticamente hace todos los campos `final` y no genera setters. Los datos solo pueden ser leídos, no modificados después de la construcción, garantizando la inmutabilidad del agregado raíz.
 
 ## Regla 10 - Eliminar comentarios redundantes
 
