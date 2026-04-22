@@ -90,10 +90,10 @@
 * **Problema:** Los métodos factory contenían strings hardcodeados directamente en los mensajes de error sin extraerlos a constantes nombradas, dificultando su mantenimiento y cambios futuros.
 * **Solución:** Se extrajeron los mensajes a constantes estáticas `SMTP_ERROR_MESSAGE` y `SEND_FAILED_MESSAGE` en la clase, permitiendo reutilizarlas y facilitar cambios centralizados.
 
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/ConsoleIO.java`
-* **Problema:** Los mensajes de error de validación estaban hardcodeados como strings literales dentro de los métodos `readRequired()` y `readInt()`, dificultando cambios futuros y violando el principio DRY si se necesitara reutilizar estos mensajes.
-* **Solución:** Se extrajeron los mensajes a constantes estáticas `BLANK_VALUE_ERROR` e `INVALID_NUMBER_ERROR` en la clase, permitiendo acceso centralizado y facilitando futuros cambios.
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserPassword.java`
+* **Problema:** El código contenía magic numbers sin nombre descriptivo: `8` (longitud mínima de contraseña) y `12` (costo de BCrypt). Estos números mágicos requieren que el lector entienda el contexto para adivinar su significado, haciendo el código frágil y difícil de mantener.
+* **Solución:** Se extrajeron dos constantes estáticas con nombres descriptivos: `MINIMUM_LENGTH = 8` y `BCRYPT_COST = 12`. Ahora el código es autoexplicativo y facilita cambios futuros.
 
 ## Regla 9: Código expresivo antes que comentarios
 
