@@ -48,4 +48,20 @@ public class UserModel {
   public boolean verifyPassword(final String plainPassword) {
     return password.verifyPlain(plainPassword);
   }
+
+  public String idValue() {
+    return id.value();
+  }
+
+  public String nameValue() {
+    return name.value();
+  }
+
+  public String emailValue() {
+    return email.value();
+  }
+
+  public String passwordValue() {
+    return password.value();
+  }
 }
