@@ -30,12 +30,7 @@ public final class UpdateUserService implements UpdateUserUseCase {
   private final Validator validator;
 
   @Override
-  public UserModel execute(final UpdateUserCommand command) {
-    // Clean Code - Regla 8 (separar comandos y consultas — CQS):
-    // Este método MODIFICA estado (actualiza el usuario en base de datos)
-    // Y TAMBIÉN RETORNA el usuario actualizado (consulta).
-    // La regla dice: un método que modifica estado no debe presentarse como consulta.
-    // Solución: void execute(command) para el comando + UserModel getUpdatedUser(id) para la consulta.
+  public void execute(final UpdateUserCommand command) {
     validateCommand(command);
 
     log.info("Actualizando usuario id=" + command.id() + ", email=" + command.email() + ", nombre=" + command.name());
@@ -48,27 +43,9 @@ public final class UpdateUserService implements UpdateUserUseCase {
 
     final UserModel userToUpdate =
         UserApplicationMapper.fromUpdateCommandToModel(command, current.getPassword());
-    final UserModel updatedUser = updateUserPort.update(userToUpdate);
+    updateUserPort.update(userToUpdate);
 
-    // Clean Code - Regla 6: parámetro booleano de control (boolean flag).
-    // La regla dice: no usar boolean flags para cambiar el comportamiento interno de un método.
-    // Si true/false altera el flujo, probablemente hay dos responsabilidades distintas.
-    // Solución: dos métodos separados updateUserAndNotify() y updateUserSilently().
-    notifyIfRequired(updatedUser, true);
-
-    return updatedUser;
-  }
-
-  // Clean Code - Regla 6: método con dos modos de operar según el boolean — viola la regla.
-  // Clean Code - Regla 7: efecto secundario oculto — el nombre "notifyIfRequired" no indica
-  // que también hace logging cuando notify=false. El nombre es engañoso sobre sus efectos.
-  private void notifyIfRequired(final UserModel user, final boolean notify) {
-    if (notify) {
-      emailNotificationService.notifyUserUpdated(user);
-    } else {
-      // cuando no se notifica, se registra igualmente en el log interno
-      log.info("Actualización silenciosa para usuario: " + user.getId().value());
-    }
+    emailNotificationService.notifyUserUpdated(current);
   }
 
   private void validateCommand(final UpdateUserCommand command) {

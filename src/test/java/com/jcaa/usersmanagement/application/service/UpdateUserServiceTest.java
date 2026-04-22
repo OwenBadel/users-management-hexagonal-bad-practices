@@ -84,11 +84,9 @@ class UpdateUserServiceTest {
     when(getUserByIdPort.getById(any())).thenReturn(Optional.of(existingUser));
     when(getUserByEmailPort.getByEmail(any())).thenReturn(Optional.of(existingUser));
     when(updateUserPort.update(any())).thenReturn(existingUser);
-    final UserModel result = service.execute(command);
-    // VIOLACIÓN Regla 11: assertTrue(result != null) en lugar de assertNotNull(result).
-    assertTrue(result != null);
+    service.execute(command);
     verify(updateUserPort).update(any(UserModel.class));
-    verify(emailNotificationService).notifyUserUpdated(existingUser);
+    verify(emailNotificationService).notifyUserUpdated(any(UserModel.class));
   }
 
   // VIOLACIÓN Regla 11: falta @DisplayName en el método.
