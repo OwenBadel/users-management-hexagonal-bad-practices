@@ -44,4 +44,8 @@ public class UserModel {
   public UserModel deactivate() {
     return new UserModel(id, name, email, password, role, UserStatus.INACTIVE);
   }
+
+  public boolean verifyPassword(final String plainPassword) {
+    return password.verifyPlain(plainPassword);
+  }
 }

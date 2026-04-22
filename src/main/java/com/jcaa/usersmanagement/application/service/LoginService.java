@@ -39,8 +39,7 @@ public final class LoginService implements LoginUseCase {
       throw InvalidCredentialsException.becauseCredentialsAreInvalid();
     }
 
-    // Clean Code - Regla 14: (Lo arreglaremos en el Ciclo 2)
-    if (!user.getPassword().verifyPlain(plainPassword)) {
+    if (!user.verifyPassword(plainPassword)) {
       throw InvalidCredentialsException.becauseCredentialsAreInvalid();
     }
 
