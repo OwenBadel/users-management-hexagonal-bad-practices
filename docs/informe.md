@@ -138,10 +138,10 @@
 * **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
 * **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
 
-### Violación 5
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/ValidatorProvider.java`
-* **Problema:** La clase contiene solo métodos estáticos pero no estaba anotada con `@UtilityClass`, lo que significa que puede ser instanciada accidentalmente, violando el patrón de clase utilitaria. Lombok proporciona `@UtilityClass` para automatizar la generación de un constructor privado y hacer la intención explícita.
-* **Solución:** Se agregó la anotación `@UtilityClass` de Lombok, que genera automáticamente un constructor privado y previene instanciación accidental. La clase ahora comunica claramente su propósito como clase utilitaria de solo métodos estáticos.
+### Violación 6
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/email/JavaMailEmailSenderAdapter.java`
+* **Problema:** El código usaba el nombre completamente cualificado `javax.mail.internet.InternetAddress` en una línea, aunque la clase estaba ya importada correctamente en la declaración de imports. Usar el nombre completo cuando la clase está importada es redundante, verboso, y contradice la razón de tener imports.
+* **Solución:** Se simplificó la línea para usar solo `InternetAddress`, manteniendo consistencia con el resto del código que ya lo hacía de esta forma. El nombre completo solo debe usarse en casos de ambigüedad o conflicto de nombres.
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
