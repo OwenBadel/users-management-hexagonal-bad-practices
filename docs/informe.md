@@ -186,3 +186,10 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/mapper/UserPersistenceMapper.java`
 * **Problema:** El método `fromModelToDto` hacía múltiples llamadas encadenadas como `user.getId().value()`, `user.getName().value()`, etc., navegando a través de cada value object para extraer su valor primitivo. El mapper violaba la Ley de Deméter al necesitar conocer la estructura interna de `UserModel` (qué value objects contiene) y cómo acceder a sus valores. Esto crea acoplamiento fuerte: cualquier cambio en los value objects requeriría cambiar el mapper.
 * **Solución:** Se agregaron métodos delegadores en `UserModel`: `idValue()`, `nameValue()`, `emailValue()`, `passwordValue()` que extraen y retornan directamente los valores primitivos. Ahora el mapper llama a estos métodos en lugar de navegar al interior del objeto. El mapper habla solo con `UserModel` (su "amigo directo"), mientras que `UserModel` es responsable de proporcionar acceso a sus datos de forma segura y encapsulada.
+
+## Regla 16: Evitar condicionales repetitivas
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
+* **Problema:** El método `getStatusLabel()` utilizaba una cascada larga de `if/else if` para mapear estados de usuario a sus etiquetas de presentación. Esta estructura crece linealmente con cada nuevo estado agregado, es repetitiva, difícil de mantener, y viola la intención: solo necesita buscar un valor en una tabla.
+* **Solución:** Se reemplazó la cascada de condicionales por un `Map<String, String>` estático (`STATUS_LABELS`) que agrupa todos los estados y sus etiquetas. El método ahora usa `getOrDefault()` para buscar la etiqueta o retornar un valor por defecto. Agregar un nuevo estado es ahora trivial: solo añadir una entrada al mapa, sin modificar lógica condicional.
