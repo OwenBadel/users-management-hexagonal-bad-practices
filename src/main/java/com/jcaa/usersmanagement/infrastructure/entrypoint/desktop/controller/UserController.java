@@ -61,8 +61,7 @@ public final class UserController {
   }
 
   public void deleteUser(final String id) {
-    // VIOLACIÓN Regla 9 (Hexagonal): construye directamente el command de aplicación sin mapper.
-    final var command = new DeleteUserCommand(id);
+    final var command = UserDesktopMapper.toDeleteCommand(id);
     deleteUserUseCase.execute(command);
   }
 

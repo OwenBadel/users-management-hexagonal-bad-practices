@@ -200,3 +200,8 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
 * **Problema:** En el método `createUser`, el entrypoint construía directamente un `CreateUserCommand` del dominio de aplicación sin pasar por el mapper. Esto acopla la capa de infraestructura directamente con los objetos de transferencia de datos de la capa de aplicación, saltándose la responsabilidad del mapper que es justamente traducir entre las peticiones externas y los comandos internos.
 * **Solución:** Se utilizó el método estático `toCreateCommand(request)` de la clase `UserDesktopMapper` para delegar la creación del comando. Se eliminaron los comentarios relativos a la violación, manteniendo la capa de entrada aislada de los detalles de estructuración interna del dominio.
+
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** En el método `deleteUser`, el entrypoint construía directamente un `DeleteUserCommand` acoplando la infraestructura al dominio de aplicación en lugar de usar un mapper.
+* **Solución:** Se reemplazó la construcción directa por una llamada a `UserDesktopMapper.toDeleteCommand(id)`, delegando la responsabilidad de mapeo correctamente y limpiando los comentarios originales de la violación.
