@@ -138,10 +138,10 @@
 * **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
 * **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
 
-### Violación 6
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/email/JavaMailEmailSenderAdapter.java`
-* **Problema:** El código usaba el nombre completamente cualificado `javax.mail.internet.InternetAddress` en una línea, aunque la clase estaba ya importada correctamente en la declaración de imports. Usar el nombre completo cuando la clase está importada es redundante, verboso, y contradice la razón de tener imports.
-* **Solución:** Se simplificó la línea para usar solo `InternetAddress`, manteniendo consistencia con el resto del código que ya lo hacía de esta forma. El nombre completo solo debe usarse en casos de ambigüedad o conflicto de nombres.
+### Violación 7
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** El método `listAllUsers()` usaba la abreviatura `usrs` para el nombre de variable en lugar del nombre completo. Las abreviaturas reducen la legibilidad y requieren que el lector descifre qué significa `usrs` — especialmente problemático en un equipo donde otros no escribieron el código.
+* **Solución:** Se renombró la variable a `users`, que es clara, autodocumentada, y no crea confusión. El nombre explícito comunica su propósito sin ambigüedad.
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
