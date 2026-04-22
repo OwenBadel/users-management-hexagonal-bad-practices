@@ -37,11 +37,10 @@
 
 
 
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/DeleteUserService.java`
-* **Problema:** Presencia de un bloque `try-catch` que captura excepciones genéricas sin lógica de recuperación, realizando un log redundante antes de relanzar la excepción.
-* **Solución:** Se eliminó el bloque `try-catch`. Esto permite que las excepciones se propaguen limpiamente hacia la capa de infraestructura para ser procesadas por el manejador global de excepciones, reduciendo la complejidad del método.
-
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserEmail.java`
+* **Problema:** La capa de dominio contenía un `Logger` e invocaba `LOGGER.warning()` para registrar un dato PII (el email del usuario) durante la validación del value object. El dominio no debe tener dependencias de infraestructura (logging, I/O, etc.) ni debe ser responsable de telemetría. Además, loguear datos PII en el dominio viola principios de privacidad y seguridad.
+* **Solución:** Se removió completamente el `Logger`, su importación y la llamada al logging. El dominio ahora es puro: solo realiza validación y persiste el estado sin efectos secundarios de infraestructura. Si se requiere logging, esa responsabilidad recae en los servicios de aplicación que invocan al dominio.
 
 ## Reglas 21 y 5: No usar códigos especiales de error y No retornar null
 
