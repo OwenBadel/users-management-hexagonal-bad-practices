@@ -2,6 +2,9 @@ package com.jcaa.usersmanagement.domain.exception;
 
 public final class EmailSenderException extends DomainException {
 
+  private static final String SMTP_ERROR_MESSAGE = "No se pudo enviar el correo a '%s'. Error SMTP: %s";
+  private static final String SEND_FAILED_MESSAGE = "La notificación por correo no pudo ser enviada.";
+
   // VIOLACIÓN Regla 9 (Clean Code): constructores public en una excepción que debería usar
   // factory methods con constructores privados para controlar cómo se instancia.
   // Así cualquier clase puede crear excepciones con mensajes arbitrarios.
@@ -15,13 +18,11 @@ public final class EmailSenderException extends DomainException {
 
   public static EmailSenderException becauseSmtpFailed(
       final String destinationEmail, final String smtpError) {
-    // VIOLACIÓN Regla 10: texto hardcodeado directamente — debe ser una constante.
     return new EmailSenderException(
-        String.format("No se pudo enviar el correo a '%s'. Error SMTP: %s", destinationEmail, smtpError));
+        String.format(SMTP_ERROR_MESSAGE, destinationEmail, smtpError));
   }
 
   public static EmailSenderException becauseSendFailed(final Throwable cause) {
-    // VIOLACIÓN Regla 10: texto hardcodeado directamente — debe ser una constante.
-    return new EmailSenderException("La notificación por correo no pudo ser enviada.", cause);
+    return new EmailSenderException(SEND_FAILED_MESSAGE, cause);
   }
 }
