@@ -2,6 +2,7 @@ package com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.io;
 
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.dto.UserResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,14 @@ public final class UserResponsePrinter {
 
   private static final String SEPARATOR = "-".repeat(52);
   private static final String ROW_FORMAT = "  %-10s : %s%n";
+
+  private static final Map<String, String> STATUS_LABELS = Map.ofEntries(
+      Map.entry("ACTIVE", "Activo"),
+      Map.entry("INACTIVE", "Inactivo"),
+      Map.entry("PENDING", "Pendiente de activacion"),
+      Map.entry("BLOCKED", "Bloqueado"),
+      Map.entry("DELETED", "Eliminado")
+  );
 
   private final ConsoleIO console;
 
@@ -54,23 +63,9 @@ public final class UserResponsePrinter {
   }
 
   // Clean Code - Regla 16 (evitar condicionales repetitivas cuando el polimorfismo aporta claridad):
-  // Esta cadena de if/else crece con cada nuevo estado posible del usuario.
-  // La regla dice: cuando una condición por tipo/estado crece repetidamente, se evalúa
-  // encapsular el comportamiento. Aquí, un Map<String, String> de estados a etiquetas,
-  // o un método getDisplayLabel() en el propio enum UserStatus, eliminaría toda la cascada.
+  // Se encapsuló la cadena de if/else en un Map, eliminando la lógica condicional.
+  // Agregar un nuevo estado es trivial: solo se añade una entrada al mapa.
   private static String getStatusLabel(final String status) {
-    if ("ACTIVE".equals(status)) {
-      return "Activo";
-    } else if ("INACTIVE".equals(status)) {
-      return "Inactivo";
-    } else if ("PENDING".equals(status)) {
-      return "Pendiente de activacion";
-    } else if ("BLOCKED".equals(status)) {
-      return "Bloqueado";
-    } else if ("DELETED".equals(status)) {
-      return "Eliminado";
-    } else {
-      return "Estado desconocido";
-    }
+    return STATUS_LABELS.getOrDefault(status, "Estado desconocido");
   }
 }
