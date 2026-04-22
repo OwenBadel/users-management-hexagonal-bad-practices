@@ -138,10 +138,10 @@
 * **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
 * **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
 
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserPassword.java`
-* **Problema:** El método `fromPlainText()` utilizaba una comparación manual `if (plainText == null)` seguida de `throw new NullPointerException()`, que es verboso y no sigue las convenciones estándar de Java. La API de `java.util.Objects` proporciona métodos específicos para validaciones de nulidad que son más claros y expresivos.
-* **Solución:** Se reemplazó la comparación manual con `Objects.requireNonNull(plainText, "Password cannot be null")`, que es más idiomático, lanza directamente la excepción correcta con el mensaje especificado, y comunica claramente la intención sin comentarios.
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserId.java`
+* **Problema:** El canonical constructor utilizaba una comparación manual `if (value == null)` seguida de `throw new NullPointerException()`, que es verboso y no sigue las convenciones estándar de Java.
+* **Solución:** Se reemplazó con `Objects.requireNonNull(value, "UserId cannot be null")`, que es más idiomático, conciso, y comunica claramente la intención sin necesidad de comentarios.
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
