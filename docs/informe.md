@@ -138,10 +138,10 @@
 * **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
 * **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
 
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserId.java`
-* **Problema:** El canonical constructor utilizaba una comparación manual `if (value == null)` seguida de `throw new NullPointerException()`, que es verboso y no sigue las convenciones estándar de Java.
-* **Solución:** Se reemplazó con `Objects.requireNonNull(value, "UserId cannot be null")`, que es más idiomático, conciso, y comunica claramente la intención sin necesidad de comentarios.
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** La clase contenía un import con wildcard `import java.util.*;` que oculta qué clases específicas se están importando. Imports con wildcards hacen que sea difícil saber qué dependencias reales tiene una clase y pueden introducir conflictos de nombres si dos paquetes exportan una clase con el mismo nombre.
+* **Solución:** Se reemplazó `import java.util.*;` con imports específicos: `import java.util.List;` e `import java.util.Optional;`, dejando explícito exactamente qué se utiliza del paquete `java.util`. Esto mejora la legibilidad y transparencia de dependencias.
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
