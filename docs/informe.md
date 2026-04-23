@@ -192,6 +192,11 @@
 * **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y de Javadoc descriptivo.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (creación con trimming, excepciones en valores nulos y vacíos). Se agregó la anotación `@DisplayName("UserId")` a la clase.
 
+### Violación 16
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/domain/valueobject/UserIdTest.java`
+* **Problema:** El método parametrizado `shouldCreateUserIdWithTrimmedValue` carecía de estructura AAA y usaba `assertTrue(x.equals(y))` en lugar de `assertEquals(x, y)`.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(correctUserId.equals(userId.toString()))` por `assertEquals(correctUserId, userId.toString())`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
