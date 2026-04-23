@@ -247,6 +247,13 @@
 * **Problema:** El método `ensureEmailIsNotTakenByAnotherUser()` contenía una condición booleana monumental e ilegible que llamaba al mismo repositorio 5 veces con lógica redundante y difícil de comprender: (A && B && C) || (A && D) donde A = getByEmail().isPresent().
 * **Solución:** Se simplificó mediante Optional.ifPresent() con una lógica clara de una sola llamada al repositorio: primero obtener el usuario existente, luego verificar si pertenece a otro owner. Esto es más legible, eficiente y expresa claramente la intención: "si el email ya existe y no es de este usuario, fallar".
 
+## Regla 22: Código difícil de refactorizar
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/Main.java`
+* **Problema:** El método `main()` estaba acoplado directamente a clases concretas (DependencyContainer, UserManagementCli, ConsoleIO). Si se quisiera cambiar el entrypoint (de CLI a GUI), habría que editar el punto de entrada de la aplicación. No había abstracción que protegiera este acoplamiento.
+* **Solución:** Se refactorizó para extraer la lógica de construcción del CLI a `buildCli()`, encapsulando el acoplamiento en un método específico y dejando `main()` libre de detalles de implementación. Ahora si se cambia el tipo de CLI, solo buildCli() necesita modificarse.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
