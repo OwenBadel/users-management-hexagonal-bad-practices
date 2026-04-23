@@ -257,6 +257,11 @@
 * **Problema:** El método `validateNotBlank` utilizaba el operador `==` para comparar con `null` en lugar de usar `Objects.isNull()`, violando la directiva de Regla 4 que exige usar métodos de utilidad de Objects para comparaciones nulas.
 * **Solución:** Se agregó el import de `java.util.Objects` y se reemplazó `value == null` por `Objects.isNull(value)`, mejorando la claridad y consistencia del código.
 
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/AppProperties.java`
+* **Problema:** El método `doLoad` utilizaba el operador `==` para comparar el stream con `null` en lugar de usar `Objects.isNull()`.
+* **Solución:** Se agregó el import de `java.util.Objects` y se reemplazó `stream == null` por `Objects.isNull(stream)`.
+
 
 
 ### Violación 2

@@ -2,6 +2,7 @@ package com.jcaa.usersmanagement.infrastructure.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 
 public final class AppProperties {
@@ -20,9 +21,7 @@ public final class AppProperties {
   }
 
   private static Properties doLoad(final InputStream stream) {
-    // VIOLACIÓN Regla 4: se usa == null en lugar de Objects.requireNonNull() o Objects.isNull().
-    // Para objetos siempre debe usarse Objects.isNull/nonNull, nunca operadores == o !=.
-    if (stream == null) {
+    if (Objects.isNull(stream)) {
       throw new NullPointerException("File not found in classpath: " + PROPERTIES_FILE);
     }
     // VIOLACIÓN Regla 4: nombre abreviado "props" en lugar del nombre descriptivo "properties".
