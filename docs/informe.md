@@ -215,3 +215,8 @@
 * **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, violando la Regla 10 que exige extraer valores especiales en constantes con nombres descriptivos.
 * **Solución:** Se extrajeron los dos mensajes de error en constantes privadas estáticas (`INVALID_CREDENTIALS_MESSAGE` e `INACTIVE_USER_MESSAGE`), permitiendo una única fuente de verdad para estos textos y mejorando la mantenibilidad.
 
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserEmailException.java`
+* **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, incluido un String literal dentro de `String.format()`.
+* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_EMAIL_MESSAGE` e `INVALID_FORMAT_MESSAGE`), centralizando los textos de error y facilitando su mantenimiento.
+
