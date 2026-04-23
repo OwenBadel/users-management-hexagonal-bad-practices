@@ -430,3 +430,9 @@
 * **Problema:** El mismo método utilizaba la variable abreviada `opt` en lugar del nombre completo `option` en el bucle `for`. Esta abreviatura reduce la legibilidad y hace que el código sea menos autodocumentado.
 * **Solución:** Se renombró `opt` a `option` para mejorar la claridad y descriptividad del nombre de variable.
 
+
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/ConfigurationException.java`
+* **Problema:** El método factory `becauseLoadFailed()` contenía un mensaje de error hardcodeado directamente como String literal: `"Failed to load the application configuration."`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `LOAD_FAILED_MESSAGE`, centralizando el valor en un único lugar.
+
