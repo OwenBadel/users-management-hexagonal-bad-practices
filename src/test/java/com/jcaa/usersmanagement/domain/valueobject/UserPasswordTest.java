@@ -9,7 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-// VIOLACIÓN Regla 11: se eliminó @DisplayName de la clase.
+/**
+ * Tests para UserPassword.
+ *
+ * <p>Cubre: normalización y hash de contraseña, validación de longitud mínima, validación de
+ * strings vacíos.
+ */
+@DisplayName("UserPassword")
 class UserPasswordTest {
 
   // VIOLACIÓN Regla 11: falta @DisplayName en el test parametrizado.

@@ -207,6 +207,11 @@
 * **Problema:** El método parametrizado `shouldValidateUserNameMinimumLength` carecía de estructura AAA y usaba `assertTrue(x.equals(y))` en lugar de `assertEquals(x, y)`.
 * **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(correctUserName.equals(userNameVo.toString()))` por `assertEquals(correctUserName, userNameVo.toString())`.
 
+### Violación 19
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/domain/valueobject/UserPasswordTest.java`
+* **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y de Javadoc descriptivo.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (normalización y hash, validación de longitud, validación de strings vacíos). Se agregó la anotación `@DisplayName("UserPassword")`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
