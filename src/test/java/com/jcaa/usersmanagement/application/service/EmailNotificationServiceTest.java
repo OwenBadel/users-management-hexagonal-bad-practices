@@ -25,7 +25,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-// VIOLACIÓN Regla 11: se eliminó el javadoc de la clase que documentaba los casos cubiertos.
+/**
+ * Tests para EmailNotificationService.
+ *
+ * <p>Cubre: notificación exitosa de usuario creado y actualizado, validación del destinatario
+ * correcto, manejo de excepciones del puerto de envío de email.
+ */
 @DisplayName("EmailNotificationService")
 @ExtendWith(MockitoExtension.class)
 class EmailNotificationServiceTest {

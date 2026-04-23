@@ -137,6 +137,11 @@
 * **Problema:** El método `shouldThrowWhenUserNotFound()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11 que exige documentar claramente la intención de cada test con un nombre legible para reportes y ejecuciones con filtros.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")` al método, permitiendo que el framework JUnit y herramientas de reporting muestren una descripción clara del comportamiento esperado.
 
+### Violación 5
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/EmailNotificationServiceTest.java`
+* **Problema:** La clase test carecía de Javadoc descriptivo, haciendo que los lectores no supieran qué casos de uso o escenarios estaban siendo cubiertos por los tests.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos: notificación exitosa de usuario creado y actualizado, validación del destinatario correcto, y manejo de excepciones del puerto de envío de email.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
