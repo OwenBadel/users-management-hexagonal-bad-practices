@@ -369,3 +369,70 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
 
+
+## Regla 9: Separación de responsabilidades en mapeos (Hexagonal)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** El método `login()` construía directamente la `LoginCommand` sin utilizar el mapper `UserDesktopMapper.toLoginCommand()`, violando la separación de responsabilidades de la arquitectura hexagonal. Todos los otros métodos del controlador utilizaban el mapper para construir sus comandos, pero este método lo hacía directamente.
+* **Solución:** Se reemplazó `new LoginCommand(request.email(), request.password())` por `UserDesktopMapper.toLoginCommand(request)`, delegando la transformación de datos al mapper y manteniendo la consistencia arquitectónica en toda la clase.
+
+## Regla 5: No retornar null
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
+* **Problema:** El método `printList()` llamaba directamente a `users.isEmpty()` sin verificar si `users` era nulo primero. Si `GetAllUsersService` retornaba `null` (violando también Regla 5 en esa capa), este método lanzaría `NullPointerException`. El código no era defensivo contra violaciones de contrato en capas precedentes.
+* **Solución:** Se agregó una verificación nula: `if (users == null || users.isEmpty())`, haciendo el código más defensivo y evitando NPE. Aunque idealmente GetAllUsersService no debería retornar null, ahora printList es resiliente a esa violación.
+
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/mapper/UserPersistenceMapper.java`
+* **Problema:** La clase `UserPersistenceMapper` contenía solo métodos públicos de conversión sin estado de instancia, pero NO estaba anotada con `@UtilityClass` de Lombok. Esto permitía que se instanciara accidentalmente, violando el patrón de clase utilitaria. Además, los métodos no eran `static`, aumentando la confusión sobre cómo usarla.
+* **Solución:** Se agregó la anotación `@UtilityClass` de Lombok a la clase (con el import correspondiente) y se convirtieron todos los métodos públicos a `static`. Además, se eliminó la instanciación innecesaria del mapper en `UserRepositoryMySQL` y en `UserPersistenceMapperTest`, reemplazando todos los llamados con invocaciones estáticas `UserPersistenceMapper.metodo()`.
+
+
+## Regla 9: Factory methods para excepciones (Clean Code)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/EmailSenderException.java`
+* **Problema:** La clase `EmailSenderException` exponía constructores públicos, permitiendo que cualquier código creara excepciones con mensajes arbitrarios sin restricción. Esto violaba el control sobre cómo se instancia la excepción y hacía que el contrato de mensajes de error fuera frágil.
+* **Solución:** Se convirtieron ambos constructores públicos a privados. Ahora todas las instancias deben crearse a través de los factory methods (`becauseSmtpFailed()` y `becauseSendFailed()`), centralizando el control sobre los mensajes de error permitidos y mejorando la cohesión de la clase.
+
+
+### Violación 7
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/UpdateUserHandler.java`
+* **Problema:** El método `handle()` utilizaba variables con nombres abreviados no descriptivos: `pw` en lugar de `password` y `upd` en lugar de `updated`. Estas abreviaturas reducen la legibilidad y obligan al lector a descifrar su significado.
+* **Solución:** Se renombraron las variables a sus formas completas y descriptivas: `password` y `updated`, mejorando la claridad del código sin sacrificar concisión.
+
+
+## Regla 6: Evitar logging de PII (Personally Identifiable Information)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/LoginHandler.java`
+* **Problema:** El método `handle()` registraba el email del usuario (PII) en un log de warning cuando el login fallaba: `log.warning("Intento de login fallido para email: " + email)`. Los datos personales de negocio nunca deben exponerse en logs.
+* **Solución:** Se eliminó completamente la línea de logging. La excepción se captura y se muestra al usuario mediante la consola, lo cual es suficiente sin comprometer datos sensibles en los registros de log del sistema.
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/CreateUserHandler.java`
+* **Problema:** Combinaba dos violaciones: (Regla 4) Logger instanciado manualmente como `Logger.getLogger(...)` en lugar de usar `@Log` de Lombok, y (Regla 6) registraba el mensaje de excepción que contenía PII (el email del usuario duplicado).
+* **Solución:** Se reemplazó el Logger manual por la anotación `@Log` de Lombok y se eliminó la línea `LOGGER.warning("Usuario ya existe: " + exception.getMessage())` que exponía datos sensibles. El error ahora se comunica solo al usuario mediante consola, sin comprometer privacidad en los logs del sistema.
+
+
+## Regla 10: Eliminar números mágicos y strings hardcodeados
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/UserManagementCli.java`
+* **Problema:** El método `printMenu()` contenía tres instancias hardcodeadas del patrón de borde `"  =========================================="` en lugar de reutilizar la constante `MENU_BORDER` que ya estaba definida a nivel de clase.
+* **Solución:** Se reemplazaron todas las instancias hardcodeadas del borde por referencias a la constante `MENU_BORDER`, centralizando el valor en un único lugar y facilitando futuros cambios de formato.
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/UserManagementCli.java`
+* **Problema:** El mismo método utilizaba la variable abreviada `opt` en lugar del nombre completo `option` en el bucle `for`. Esta abreviatura reduce la legibilidad y hace que el código sea menos autodocumentado.
+* **Solución:** Se renombró `opt` a `option` para mejorar la claridad y descriptividad del nombre de variable.
+
+
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/ConfigurationException.java`
+* **Problema:** El método factory `becauseLoadFailed()` contenía un mensaje de error hardcodeado directamente como String literal: `"Failed to load the application configuration."`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `LOAD_FAILED_MESSAGE`, centralizando el valor en un único lugar.
+
