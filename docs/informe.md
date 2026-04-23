@@ -247,6 +247,14 @@
 * **Problema:** El método `ensureEmailIsNotTakenByAnotherUser()` contenía una condición booleana monumental e ilegible que llamaba al mismo repositorio 5 veces con lógica redundante y difícil de comprender: (A && B && C) || (A && D) donde A = getByEmail().isPresent().
 * **Solución:** Se simplificó mediante Optional.ifPresent() con una lógica clara de una sola llamada al repositorio: primero obtener el usuario existente, luego verificar si pertenece a otro owner. Esto es más legible, eficiente y expresa claramente la intención: "si el email ya existe y no es de este usuario, fallar".
 
+## Regla 8: Argumentos de función
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
+* **Problema:** El método `getAndValidateUser()` usaba `Optional.orElse(null)` para obtener el usuario, violando Regla 5 (no retornar null) y creando una validación nula innecesaria: si(user == null) lanzar excepción.
+* **Solución:** Se refactorizo para usar `Optional.orElseThrow()`, eliminando la variable nula y la validación redundante. Ahora si el usuario no existe, directamente se lanza la excepción, haciendo el código más limpio y eliminando el anti-patrón de null.
+
+
 ## Regla 22: Código difícil de refactorizar
 
 ### Violación 1

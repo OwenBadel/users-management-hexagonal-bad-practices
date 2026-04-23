@@ -26,25 +26,17 @@ public final class LoginService implements LoginUseCase {
 
     final UserEmail email = new UserEmail(command.email());
 
-    // Clean Code - Regla 8: (Lo arreglaremos en el Ciclo 3)
-    final UserModel user = getAndValidateUser(email, command.password());
-
-    return user;
+    return getAndValidateUser(email, command.password());
   }
 
   private UserModel getAndValidateUser(final UserEmail email, final String plainPassword) {
-    final UserModel user = getUserByEmailPort.getByEmail(email).orElse(null);
-
-    if (user == null) {
-      throw InvalidCredentialsException.becauseCredentialsAreInvalid();
-    }
+    final UserModel user = getUserByEmailPort.getByEmail(email)
+        .orElseThrow(() -> InvalidCredentialsException.becauseCredentialsAreInvalid());
 
     if (!user.verifyPassword(plainPassword)) {
       throw InvalidCredentialsException.becauseCredentialsAreInvalid();
     }
 
-    // SOLUCIÓN Regla 17 y 12: Se extrajo la condición compleja a un método
-    // con nombre significativo, simplificando la redundancia booleana.
     ensureUserIsActive(user);
 
     return user;
