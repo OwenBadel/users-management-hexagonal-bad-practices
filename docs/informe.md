@@ -212,6 +212,11 @@
 * **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y de Javadoc descriptivo.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (normalización y hash, validación de longitud, validación de strings vacíos). Se agregó la anotación `@DisplayName("UserPassword")`.
 
+### Violación 20
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/domain/valueobject/UserPasswordTest.java`
+* **Problema:** El método parametrizado `shouldNormalizeAndHashPassword` carecía de `@DisplayName`, estructura AAA y usaba `assertTrue(result.value() != null)` en lugar de `assertNotNull(result.value())`.
+* **Solución:** Se agregó la anotación `@DisplayName("Normaliza espacios en blanco y hashea la contraseña correctamente")`. Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(result.value() != null)` por `assertNotNull(result.value())`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
