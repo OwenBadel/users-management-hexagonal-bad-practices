@@ -417,3 +417,16 @@
 * **Problema:** Combinaba dos violaciones: (Regla 4) Logger instanciado manualmente como `Logger.getLogger(...)` en lugar de usar `@Log` de Lombok, y (Regla 6) registraba el mensaje de excepción que contenía PII (el email del usuario duplicado).
 * **Solución:** Se reemplazó el Logger manual por la anotación `@Log` de Lombok y se eliminó la línea `LOGGER.warning("Usuario ya existe: " + exception.getMessage())` que exponía datos sensibles. El error ahora se comunica solo al usuario mediante consola, sin comprometer privacidad en los logs del sistema.
 
+
+## Regla 10: Eliminar números mágicos y strings hardcodeados
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/UserManagementCli.java`
+* **Problema:** El método `printMenu()` contenía tres instancias hardcodeadas del patrón de borde `"  =========================================="` en lugar de reutilizar la constante `MENU_BORDER` que ya estaba definida a nivel de clase.
+* **Solución:** Se reemplazaron todas las instancias hardcodeadas del borde por referencias a la constante `MENU_BORDER`, centralizando el valor en un único lugar y facilitando futuros cambios de formato.
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/UserManagementCli.java`
+* **Problema:** El mismo método utilizaba la variable abreviada `opt` en lugar del nombre completo `option` en el bucle `for`. Esta abreviatura reduce la legibilidad y hace que el código sea menos autodocumentado.
+* **Solución:** Se renombró `opt` a `option` para mejorar la claridad y descriptividad del nombre de variable.
+
