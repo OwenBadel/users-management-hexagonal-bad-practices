@@ -240,3 +240,8 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_STATUS_MESSAGE`.
 
+### Violación 7
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserAlreadyExistsException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `EMAIL_EXISTS_MESSAGE`.
+
