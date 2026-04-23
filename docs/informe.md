@@ -262,6 +262,11 @@
 * **Problema:** El método `doLoad` utilizaba el operador `==` para comparar el stream con `null` en lugar de usar `Objects.isNull()`.
 * **Solución:** Se agregó el import de `java.util.Objects` y se reemplazó `stream == null` por `Objects.isNull(stream)`.
 
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/AppProperties.java`
+* **Problema:** La variable local en `doLoad` utilizaba la abreviatura `props` en lugar del nombre completo y descriptivo `properties`.
+* **Solución:** Se renombró la variable de `props` a `properties` para mejorar la claridad y cumplir con la directiva de Regla 4 que exige nombres descriptivos sin abreviaturas.
+
 
 
 ### Violación 2

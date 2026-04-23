@@ -24,15 +24,13 @@ public final class AppProperties {
     if (Objects.isNull(stream)) {
       throw new NullPointerException("File not found in classpath: " + PROPERTIES_FILE);
     }
-    // VIOLACIÓN Regla 4: nombre abreviado "props" en lugar del nombre descriptivo "properties".
-    // Los nombres deben ser claros y sin abreviaturas.
-    final Properties props = new Properties();
+    final Properties properties = new Properties();
     try (stream) {
-      props.load(stream);
+      properties.load(stream);
     } catch (final IOException exception) {
       throw ConfigurationException.becauseLoadFailed(exception);
     }
-    return props;
+    return properties;
   }
 
   public String get(final String key) {
