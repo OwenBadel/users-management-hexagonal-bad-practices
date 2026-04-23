@@ -390,3 +390,11 @@
 * **Problema:** La clase `UserPersistenceMapper` contenía solo métodos públicos de conversión sin estado de instancia, pero NO estaba anotada con `@UtilityClass` de Lombok. Esto permitía que se instanciara accidentalmente, violando el patrón de clase utilitaria. Además, los métodos no eran `static`, aumentando la confusión sobre cómo usarla.
 * **Solución:** Se agregó la anotación `@UtilityClass` de Lombok a la clase (con el import correspondiente) y se convirtieron todos los métodos públicos a `static`. Además, se eliminó la instanciación innecesaria del mapper en `UserRepositoryMySQL` y en `UserPersistenceMapperTest`, reemplazando todos los llamados con invocaciones estáticas `UserPersistenceMapper.metodo()`.
 
+
+## Regla 9: Factory methods para excepciones (Clean Code)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/EmailSenderException.java`
+* **Problema:** La clase `EmailSenderException` exponía constructores públicos, permitiendo que cualquier código creara excepciones con mensajes arbitrarios sin restricción. Esto violaba el control sobre cómo se instancia la excepción y hacía que el contrato de mensajes de error fuera frágil.
+* **Solución:** Se convirtieron ambos constructores públicos a privados. Ahora todas las instancias deben crearse a través de los factory methods (`becauseSmtpFailed()` y `becauseSendFailed()`), centralizando el control sobre los mensajes de error permitidos y mejorando la cohesión de la clase.
+
