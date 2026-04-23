@@ -384,3 +384,9 @@
 * **Problema:** El método `printList()` llamaba directamente a `users.isEmpty()` sin verificar si `users` era nulo primero. Si `GetAllUsersService` retornaba `null` (violando también Regla 5 en esa capa), este método lanzaría `NullPointerException`. El código no era defensivo contra violaciones de contrato en capas precedentes.
 * **Solución:** Se agregó una verificación nula: `if (users == null || users.isEmpty())`, haciendo el código más defensivo y evitando NPE. Aunque idealmente GetAllUsersService no debería retornar null, ahora printList es resiliente a esa violación.
 
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/mapper/UserPersistenceMapper.java`
+* **Problema:** La clase `UserPersistenceMapper` contenía solo métodos públicos de conversión sin estado de instancia, pero NO estaba anotada con `@UtilityClass` de Lombok. Esto permitía que se instanciara accidentalmente, violando el patrón de clase utilitaria. Además, los métodos no eran `static`, aumentando la confusión sobre cómo usarla.
+* **Solución:** Se agregó la anotación `@UtilityClass` de Lombok a la clase (con el import correspondiente) y se convirtieron todos los métodos públicos a `static`. Además, se eliminó la instanciación innecesaria del mapper en `UserRepositoryMySQL` y en `UserPersistenceMapperTest`, reemplazando todos los llamados con invocaciones estáticas `UserPersistenceMapper.metodo()`.
+
