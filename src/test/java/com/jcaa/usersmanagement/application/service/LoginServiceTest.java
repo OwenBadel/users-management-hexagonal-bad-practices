@@ -46,8 +46,7 @@ class LoginServiceTest {
   @Test
   @DisplayName("execute() retorna el usuario cuando las credenciales son correctas y está activo")
   void shouldReturnUserWhenCredentialsAreValidAndUserIsActive() {
-    // VIOLACIÓN Regla 11: se eliminaron los comentarios de estructura Arrange–Act–Assert.
-    // La regla exige que cada bloque esté documentado con // Arrange, // Act, // Assert.
+    // Arrange
     final LoginCommand command = new LoginCommand(EMAIL, PASSWORD);
     final UserModel activeUser =
         new UserModel(
@@ -58,12 +57,13 @@ class LoginServiceTest {
             UserRole.ADMIN,
             UserStatus.ACTIVE);
     when(getUserByEmailPort.getByEmail(any())).thenReturn(Optional.of(activeUser));
+
+    // Act
     final UserModel result = service.execute(command);
-    // VIOLACIÓN Regla 11: se usa assertTrue(result != null) en lugar de assertNotNull(result).
-    // La regla indica usar las aserciones correctas — assertNotNull es más expresivo.
-    assertTrue(result != null);
-    // VIOLACIÓN Regla 11: se usa assertTrue(result == activeUser) en lugar de assertSame(...).
-    assertTrue(result == activeUser);
+
+    // Assert
+    assertNotNull(result);
+    assertSame(activeUser, result);
   }
 
   // ── email no registrado

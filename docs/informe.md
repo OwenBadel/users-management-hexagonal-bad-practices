@@ -177,6 +177,11 @@
 * **Problema:** El método `shouldThrowWhenUserNotFound()` no tenía la anotación `@DisplayName`.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")`.
 
+### Violación 13
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/LoginServiceTest.java`
+* **Problema:** El método `shouldReturnUserWhenCredentialsAreValidAndUserIsActive()` carecía de estructura AAA y usaba aserciones débiles: `assertTrue(result != null)` y `assertTrue(result == activeUser)`.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(result != null)` por `assertNotNull(result)` y `assertTrue(result == activeUser)` por `assertSame(activeUser, result)`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
