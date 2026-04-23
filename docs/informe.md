@@ -376,3 +376,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
 * **Problema:** El método `login()` construía directamente la `LoginCommand` sin utilizar el mapper `UserDesktopMapper.toLoginCommand()`, violando la separación de responsabilidades de la arquitectura hexagonal. Todos los otros métodos del controlador utilizaban el mapper para construir sus comandos, pero este método lo hacía directamente.
 * **Solución:** Se reemplazó `new LoginCommand(request.email(), request.password())` por `UserDesktopMapper.toLoginCommand(request)`, delegando la transformación de datos al mapper y manteniendo la consistencia arquitectónica en toda la clase.
+
+## Regla 5: No retornar null
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
+* **Problema:** El método `printList()` llamaba directamente a `users.isEmpty()` sin verificar si `users` era nulo primero. Si `GetAllUsersService` retornaba `null` (violando también Regla 5 en esa capa), este método lanzaría `NullPointerException`. El código no era defensivo contra violaciones de contrato en capas precedentes.
+* **Solución:** Se agregó una verificación nula: `if (users == null || users.isEmpty())`, haciendo el código más defensivo y evitando NPE. Aunque idealmente GetAllUsersService no debería retornar null, ahora printList es resiliente a esa violación.
+
