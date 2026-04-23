@@ -230,3 +230,8 @@
 * **Problema:** Los dos métodos factory contenían mensajes de error hardcodeados directamente, incluido un String literal dentro de `String.format()`.
 * **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_NAME_MESSAGE` y `TOO_SHORT_MESSAGE`), centralizando los textos y mejorando la mantenibilidad.
 
+### Violación 5
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserRoleException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_ROLE_MESSAGE`.
+
