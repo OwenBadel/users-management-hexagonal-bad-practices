@@ -267,6 +267,11 @@
 * **Problema:** La variable local en `doLoad` utilizaba la abreviatura `props` en lugar del nombre completo y descriptivo `properties`.
 * **Solución:** Se renombró la variable de `props` a `properties` para mejorar la claridad y cumplir con la directiva de Regla 4 que exige nombres descriptivos sin abreviaturas.
 
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/AppProperties.java`
+* **Problema:** El método `get` utilizaba la abreviatura `val` para la variable local y el operador `==` para comparar con `null`.
+* **Solución:** Se renombró la variable de `val` a `value` y se reemplazó `val == null` por `Objects.isNull(value)`, mejorando tanto la claridad de nombres como el uso de métodos de utilidad.
+
 
 
 ### Violación 2
