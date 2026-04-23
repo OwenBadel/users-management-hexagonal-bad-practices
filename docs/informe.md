@@ -500,3 +500,8 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
 * **Problema:** El método `save()` contenía tres comentarios redundantes que simplemente repetían lo obvio del código ("transformar el modelo...", "ejecutar la consulta...", "buscar y retornar...").
 * **Solución:** Se eliminaron todos los comentarios redundantes, dejando que el código y los nombres de método autodocumentado (`fromModelToDto`, `executeSave`, `findByIdOrFail`) comuniquen la intención de forma clara.
+
+### Violación 14
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** El método `saveWithFields()` contenía dos comentarios redundantes ("verificar que todos los parámetros...", "construir y guardar el modelo") que repetían lo obvio del código.
+* **Solución:** Se eliminaron los comentarios redundantes. El código ahora se explica por sí mismo mediante nombres claros (validación nula explícita, excepción descriptiva).

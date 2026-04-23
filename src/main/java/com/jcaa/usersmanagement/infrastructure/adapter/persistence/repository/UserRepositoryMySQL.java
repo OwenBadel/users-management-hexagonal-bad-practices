@@ -95,13 +95,9 @@ public final class UserRepositoryMySQL
       final String password,
       final String role,
       final String status) {
-    // Clean Code - Regla 10: comentario redundante — la línea siguiente ya es clara.
-    // verificar que todos los parámetros tengan valor
     if (id == null || name == null || email == null || password == null || role == null || status == null) {
       throw new IllegalArgumentException("Todos los campos son obligatorios");
     }
-    // Clean Code - Regla 10: otro comentario redundante.
-    // construir y guardar el modelo
     throw new UnsupportedOperationException("Usar save(UserModel) en su lugar.");
   }
 
