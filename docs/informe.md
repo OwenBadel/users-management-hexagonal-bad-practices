@@ -447,3 +447,10 @@
 * **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals.
 * **Solución:** Se extrajeron los mensajes en constantes privadas estáticas con nombres descriptivos.
 
+
+## Regla 1: Una sola cosa por función
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/Main.java`
+* **Problema:** El método `main()` realizaba múltiples responsabilidades: construir el contenedor de dependencias, crear la infraestructura de I/O (Scanner), instanciar el CLI y arrancarlo. Esto violaba el principio de responsabilidad única.
+* **Solución:** Se extrajo la construcción del CLI al método privado `buildCli()`, separando claramente las responsabilidades y permitiendo que `main()` sea una orquestación simple de alto nivel.
