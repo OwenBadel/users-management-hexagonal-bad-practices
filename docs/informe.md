@@ -404,3 +404,16 @@
 * **Problema:** El método `handle()` utilizaba variables con nombres abreviados no descriptivos: `pw` en lugar de `password` y `upd` en lugar de `updated`. Estas abreviaturas reducen la legibilidad y obligan al lector a descifrar su significado.
 * **Solución:** Se renombraron las variables a sus formas completas y descriptivas: `password` y `updated`, mejorando la claridad del código sin sacrificar concisión.
 
+
+## Regla 6: Evitar logging de PII (Personally Identifiable Information)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/LoginHandler.java`
+* **Problema:** El método `handle()` registraba el email del usuario (PII) en un log de warning cuando el login fallaba: `log.warning("Intento de login fallido para email: " + email)`. Los datos personales de negocio nunca deben exponerse en logs.
+* **Solución:** Se eliminó completamente la línea de logging. La excepción se captura y se muestra al usuario mediante la consola, lo cual es suficiente sin comprometer datos sensibles en los registros de log del sistema.
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/CreateUserHandler.java`
+* **Problema:** Combinaba dos violaciones: (Regla 4) Logger instanciado manualmente como `Logger.getLogger(...)` en lugar de usar `@Log` de Lombok, y (Regla 6) registraba el mensaje de excepción que contenía PII (el email del usuario duplicado).
+* **Solución:** Se reemplazó el Logger manual por la anotación `@Log` de Lombok y se eliminó la línea `LOGGER.warning("Usuario ya existe: " + exception.getMessage())` que exponía datos sensibles. El error ahora se comunica solo al usuario mediante consola, sin comprometer privacidad en los logs del sistema.
+
