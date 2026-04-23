@@ -220,3 +220,8 @@
 * **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, incluido un String literal dentro de `String.format()`.
 * **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_EMAIL_MESSAGE` e `INVALID_FORMAT_MESSAGE`), centralizando los textos de error y facilitando su mantenimiento.
 
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserIdException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `EMPTY_ID_MESSAGE`, aplicando la misma pauta de centralización de textos de error.
+
