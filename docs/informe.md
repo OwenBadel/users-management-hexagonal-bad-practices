@@ -327,6 +327,12 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
 
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/model/EmailDestinationModel.java`
+* **Problema:** El constructor utilizaba cuatro mensajes de error hardcodeados directamente como String literals al validar parámetros, sin centralizar estos valores en constantes nombradas.
+* **Solución:** Se extrajeron los cuatro mensajes de error en constantes privadas estáticas (`DESTINATION_EMAIL_REQUIRED_MESSAGE`, `DESTINATION_NAME_REQUIRED_MESSAGE`, `SUBJECT_REQUIRED_MESSAGE`, `BODY_REQUIRED_MESSAGE`), centralizando los valores en un único lugar para facilitar cambios futuros.
+
+
 ## Regla 4: Estilo y Naming
 
 ### Violación 1
