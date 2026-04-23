@@ -237,6 +237,13 @@
 * **Problema:** El método `shouldThrowWhenEmailAlreadyExists()` carecía de la anotación `@DisplayName` y tenía el patrón Arrange-Act-Assert mezclado sin separación mediante comentarios, dificultando la lectura de las tres fases del test.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserAlreadyExistsException cuando el email ya existe")` y se insertaron comentarios `// Arrange` y `// Act & Assert` para dividir claramente las fases del test, mejorando la estructura y legibilidad.
 
+## Regla 17: Condición booleana compleja
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/UpdateUserService.java`
+* **Problema:** El método `ensureEmailIsNotTakenByAnotherUser()` contenía una condición booleana monumental e ilegible que llamaba al mismo repositorio 5 veces con lógica redundante y difícil de comprender: (A && B && C) || (A && D) donde A = getByEmail().isPresent().
+* **Solución:** Se simplificó mediante Optional.ifPresent() con una lógica clara de una sola llamada al repositorio: primero obtener el usuario existente, luego verificar si pertenece a otro owner. Esto es más legible, eficiente y expresa claramente la intención: "si el email ya existe y no es de este usuario, fallar".
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
