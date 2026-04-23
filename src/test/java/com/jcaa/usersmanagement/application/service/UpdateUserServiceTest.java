@@ -93,8 +93,8 @@ class UpdateUserServiceTest {
     verify(emailNotificationService).notifyUserUpdated(any(UserModel.class));
   }
 
-  // VIOLACIÓN Regla 11: falta @DisplayName en el método.
   @Test
+  @DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")
   void shouldThrowWhenUserNotFound() {
     // Arrange
     final UpdateUserCommand command =

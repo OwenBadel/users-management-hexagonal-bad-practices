@@ -127,6 +127,16 @@
 * **Problema:** La clase carecía de Javadoc descriptivo. Los tests carecían de la estructura estándar (Arrange-Act-Assert) y usaban aserciones obsoletas o imprecisas (`assertTrue(x == y)`, `assertTrue(result == null)`). Además, un test no tenía `@DisplayName` y validaba un comportamiento de negocio incorrecto (esperar `null` en lugar de una lista vacía).
 * **Solución:** Se agregó el Javadoc a nivel de clase. Se estructuraron los cuerpos de los métodos con comentarios `// Arrange`, `// Act` y `// Assert`. Se actualizaron las aserciones a los métodos semánticamente correctos (`assertEquals`, `assertSame`, `assertNotNull`). Finalmente, se añadió `@DisplayName` al segundo test y se adaptó para validar el retorno de una colección vacía.
 
+### Violación 3
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/UpdateUserServiceTest.java`
+* **Problema:** El método `shouldUpdateUserAndNotifyWhenDataIsValid()` carecía de la estructura estándar Arrange-Act-Assert. El comentario de violación indicaba que los comentarios AAA habían sido eliminados, y el código mezclaba la configuración de mocks con la ejecución y validaciones sin separación clara.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert` para dividir claramente el método en sus tres fases. Se reorganizó el código: primero se prepara el command y se configuran los mocks, luego se ejecuta el servicio, y finalmente se validan los resultados mediante `verify()`.
+
+### Violación 4
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/UpdateUserServiceTest.java`
+* **Problema:** El método `shouldThrowWhenUserNotFound()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11 que exige documentar claramente la intención de cada test con un nombre legible para reportes y ejecuciones con filtros.
+* **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")` al método, permitiendo que el framework JUnit y herramientas de reporting muestren una descripción clara del comportamiento esperado.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
