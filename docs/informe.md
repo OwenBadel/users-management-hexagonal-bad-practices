@@ -167,6 +167,11 @@
 * **Problema:** El método `shouldSaveUserAndNotifyWhenEmailIsNew()` mezclaba Arrange con Act y Assert sin separación, y usaba aserciones débiles como `assertTrue(result != null)` en lugar de `assertNotNull(result)` y `assertTrue(result.getId().value().equals("u-01"))` en lugar de `assertEquals`.
 * **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert` para dividir claramente las fases. Se reemplazó `assertTrue(result != null)` por `assertNotNull(result)` y `assertTrue(x.equals(y))` por `assertEquals(x, y)`, utilizando aserciones más expresivas y correctas según JUnit 5.
 
+### Violación 11
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/GetUserByIdServiceTest.java`
+* **Problema:** El método `shouldReturnUserWhenFound()` carecía de la estructura estándar Arrange-Act-Assert, y usaba aserciones débiles: `assertTrue(result != null)` en lugar de `assertNotNull(result)` y `assertTrue(result == expected)` en lugar de `assertSame(expected, result)`.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(result != null)` por `assertNotNull(result)` y `assertTrue(result == expected)` por `assertSame(expected, result)`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
