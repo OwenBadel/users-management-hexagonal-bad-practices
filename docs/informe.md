@@ -207,3 +207,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
 * **Problema:** El método de validación contenía una expresión booleana redundante y larga (`user.getStatus() != ACTIVE || user.getStatus() == BLOCKED...`) que dificultaba la lectura y la comprensión rápida de la intención.
 * **Solución:** Se simplificó la lógica a una sola comprobación (`!= ACTIVE`) y se extrajo al método privado `ensureUserIsActive()`, mejorando drásticamente la legibilidad (Regla 17) y encapsulando parcialmente la regla de negocio (Regla 12).
+
+## Regla 10: Eliminar comentarios redundantes y Magic Numbers
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidCredentialsException.java`
+* **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, violando la Regla 10 que exige extraer valores especiales en constantes con nombres descriptivos.
+* **Solución:** Se extrajeron los dos mensajes de error en constantes privadas estáticas (`INVALID_CREDENTIALS_MESSAGE` e `INACTIVE_USER_MESSAGE`), permitiendo una única fuente de verdad para estos textos y mejorando la mantenibilidad.
+
