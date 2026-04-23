@@ -68,8 +68,8 @@ class LoginServiceTest {
 
   // ── email no registrado
 
-  // VIOLACIÓN Regla 11: falta @DisplayName — los tests deben documentar su comportamiento.
   @Test
+  @DisplayName("execute() lanza InvalidCredentialsException cuando el email no está registrado")
   void shouldThrowWhenEmailNotFound() {
     final LoginCommand command = new LoginCommand(EMAIL, PASSWORD);
 
