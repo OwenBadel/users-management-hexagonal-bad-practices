@@ -14,7 +14,6 @@ public final class GetAllUsersService implements GetAllUsersUseCase {
 
   @Override
   public List<UserModel> execute() {
-   
     return getAllUsersPort.getAll();
   }
 }

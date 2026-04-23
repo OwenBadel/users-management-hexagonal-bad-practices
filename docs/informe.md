@@ -37,10 +37,11 @@
 
 
 
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserEmail.java`
-* **Problema:** La capa de dominio contenía un `Logger` e invocaba `LOGGER.warning()` para registrar un dato PII (el email del usuario) durante la validación del value object. El dominio no debe tener dependencias de infraestructura (logging, I/O, etc.) ni debe ser responsable de telemetría. Además, loguear datos PII en el dominio viola principios de privacidad y seguridad.
-* **Solución:** Se removió completamente el `Logger`, su importación y la llamada al logging. El dominio ahora es puro: solo realiza validación y persiste el estado sin efectos secundarios de infraestructura. Si se requiere logging, esa responsabilidad recae en los servicios de aplicación que invocan al dominio.
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/DeleteUserService.java`
+* **Problema:** Presencia de un bloque `try-catch` que captura excepciones genéricas sin lógica de recuperación, realizando un log redundante antes de relanzar la excepción.
+* **Solución:** Se eliminó el bloque `try-catch`. Esto permite que las excepciones se propaguen limpiamente hacia la capa de infraestructura para ser procesadas por el manejador global de excepciones, reduciendo la complejidad del método.
+
 
 ## Reglas 21 y 5: No usar códigos especiales de error y No retornar null
 
@@ -78,21 +79,18 @@
 ## Regla 15 - Inmutabilidad como preferencia
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/model/UserModel.java`
-* **Problema:** `UserModel` usaba `@Data` de Lombok junto con `@AllArgsConstructor`, lo cual generaba setters públicos para todos los campos. El modelo de dominio debe ser inmutable: los setters públicos permiten que cualquier clase modifique el estado sin pasar por invariantes ni reglas de negocio. Con `@Data`, cualquiera podría hacer `userModel.setStatus(BLOCKED)` desde fuera del dominio, rompiendo el encapsulamiento.
-* **Solución:** Se reemplazó `@Data + @AllArgsConstructor` por `@Value` de Lombok, que automáticamente hace todos los campos `final` y no genera setters. Los datos solo pueden ser leídos, no modificados después de la construcción, garantizando la inmutabilidad del agregado raíz.
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/mapper/UserApplicationMapper.java`
+* **Problema:** El código contenía advertencias sobre el "efecto cascada" y la mutabilidad de `UserModel`, lo cual generaba ruido visual y confusión dado que el modelo ya había sido corregido.
+* **Solución:** Se limpiaron los comentarios obsoletos, ya que no había ningún @data
 
 ## Regla 10 - Eliminar comentarios redundantes
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/EmailSenderException.java`
-* **Problema:** Los métodos factory contenían strings hardcodeados directamente en los mensajes de error sin extraerlos a constantes nombradas, dificultando su mantenimiento y cambios futuros.
-* **Solución:** Se extrajeron los mensajes a constantes estáticas `SMTP_ERROR_MESSAGE` y `SEND_FAILED_MESSAGE` en la clase, permitiendo reutilizarlas y facilitar cambios centralizados.
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/CreateUserService.java`
+* **Problema:** El método `execute` estaba plagado de comentarios que explicaban lo obvio (ej. `// guardar el usuario` antes de un método `save`). 
+* **Solución:** Se eliminaron todos los comentarios redundantes para reducir el ruido visual y forzar a que el código se explique por sí mismo mediante buenos nombres de variables y métodos.
 
-### Violación 4
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserName.java`
-* **Problema:** El método `validateMinimumLength()` contenía un magic number `3` sin nombre descriptivo. Además, el canonical constructor usaba `if (value == null)` en lugar de `Objects.requireNonNull()`.
-* **Solución:** Se extrajo la constante `MINIMUM_LENGTH = 3` y se reemplazó la validación de nulidad manual por `Objects.requireNonNull()`, mejorando la legibilidad y siguiendo las convenciones estándar de Java.
+
 
 ## Regla 9: Código expresivo antes que comentarios
 
@@ -122,6 +120,13 @@
 * **Problema:** La lógica de orquestación de correos estaba duplicada en dos métodos y mezclaba lógica de alto nivel con manipulación de strings de bajo nivel.
 * **Solución:** Se extrajo la orquestación al método privado `processAndSend`, centralizando el proceso y manteniendo un único nivel de abstracción por método.
 
+## Regla 11: Pruebas (Calidad y Estructura)
+
+### Violación 2
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/GetAllUsersServiceTest.java`
+* **Problema:** La clase carecía de Javadoc descriptivo. Los tests carecían de la estructura estándar (Arrange-Act-Assert) y usaban aserciones obsoletas o imprecisas (`assertTrue(x == y)`, `assertTrue(result == null)`). Además, un test no tenía `@DisplayName` y validaba un comportamiento de negocio incorrecto (esperar `null` en lugar de una lista vacía).
+* **Solución:** Se agregó el Javadoc a nivel de clase. Se estructuraron los cuerpos de los métodos con comentarios `// Arrange`, `// Act` y `// Assert`. Se actualizaron las aserciones a los métodos semánticamente correctos (`assertEquals`, `assertSame`, `assertNotNull`). Finalmente, se añadió `@DisplayName` al segundo test y se adaptó para validar el retorno de una colección vacía.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
@@ -134,14 +139,11 @@
 ## Regla 4: Estilo y Naming
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/ConsoleIO.java`
-* **Problema:** Uso de nombres de variables abreviados (`v`, `r`) en lugar de nombres descriptivos. En `readRequired()` la variable se llamaba `v` para el valor leído, y en `readInt()` se llamaba `r` para el raw input. Nombres cortos y sin significado hacen el código más difícil de leer y mantener, especialmente cuando el mismo concepto recibe nombres diferentes en la misma clase (violando también Regla 24).
-* **Solución:** Se renombraron las variables a `value` y `rawInput` respectivamente, nombres que comunican claramente su propósito. El código ahora se auto-documenta sin necesidad de comentarios explicativos.
+* **Archivo:** `EmailNotificationService.java`
+* **Problema:** El método privado `renderTemplate` actuaba como una función pura que no utilizaba el estado de la instancia, pero no estaba marcado como `static`.
+* **Solución:** Se añadió el modificador `static` a `renderTemplate` para indicar claramente su independencia del estado de la clase y adherirse a las convenciones de Clean Code en Java.
 
-### Violación 7
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
-* **Problema:** El método `listAllUsers()` usaba la abreviatura `usrs` para el nombre de variable en lugar del nombre completo. Las abreviaturas reducen la legibilidad y requieren que el lector descifre qué significa `usrs` — especialmente problemático en un equipo donde otros no escribieron el código.
-* **Solución:** Se renombró la variable a `users`, que es clara, autodocumentada, y no crea confusión. El nombre explícito comunica su propósito sin ambigüedad.
+
 
 ## Regla 7: Evitar efectos secundarios ocultos
 
@@ -150,58 +152,18 @@
 * **Problema:** El método `sendOrLog` prometía enviar o registrar un log, pero en la práctica lanzaba una excepción no declarada en su nombre, ocultando un efecto secundario importante al consumidor del método.
 * **Solución:** Se eliminó el método `sendOrLog` y su bloque `try-catch` redundante. Ahora el método invoca directamente a `emailSenderPort.send()`, dejando que la excepción de dominio fluya transparentemente si el envío falla.
 
----
-
-# REGLAS HEXAGONAL (continuación)
-
-## Regla 2: Modelado y tipos
-
-### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/dto/UserResponse.java`
-* **Problema:** El DTO de respuesta usaba `@Data` de Lombok, generando setters públicos y haciendo el objeto mutable. Los DTOs de salida deben ser inmutables, impediendo que su estado sea modificado después de ser construido. Con `@Data` es posible hacer `response.setEmail("otro@email.com")` desde cualquier lugar, comprometiendo la integridad del objeto.
-* **Solución:** Se convirtió `UserResponse` de una clase con `@Data` a un Java `record`, que proporciona inmutabilidad total, genera automáticamente el constructor canónico, getters (sin prefijo "get"), `toString`, `equals` y `hashCode`. Los accesores en records usan notación sin prefijo: `response.id()` en lugar de `response.getId()`. Se actualizaron todas las referencias en `UserResponsePrinter.java` y en las pruebas de `UserControllerTest.java`.
-
-## Regla 8: Separar comandos y consultas (CQS)
-
-### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/UpdateUserService.java`
-* **Problema:** El método `execute` violaba el Principio de Separación de Comandos y Consultas (CQS). El método tanto **modificaba estado** (actualizaba el usuario en la base de datos) como **retornaba una consulta** (el usuario actualizado). Esto crea confusión: ¿es un comando que retorna efectos secundarios, o una consulta que modifica datos? El contrato es ambiguo y dificulta el razonamiento sobre los efectos del método.
-* **Solución:** Se refactorizó `execute` para que sea un puro comando (`void execute(command)`). El método ahora solo modifica estado: valida, persiste la actualización y notifica. Se modificó el `UpdateUserUseCase` para retornar `void`. El controlador `UserController` ahora ejecuta el comando y luego realiza una consulta separada usando `GetUserByIdUseCase` para recuperar el usuario actualizado. Esto clarifica la intención: el comando ejecuta la operación, la consulta obtiene el resultado. También se removió el método helper `notifyIfRequired` que usaba un parámetro booleano para bifurcar el comportamiento, simplificando el flujo al notificar siempre durante la actualización.
-
-## Regla 13: Evitar clases utilitarias innecesarias
-
-### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/UserValidationUtils.java`
-* **Problema:** `UserValidationUtils` era una clase "util" que agrupaba métodos de validación fragmentados (`isUserActive`, `isAdmin`, `isValidEmail`, `isValidPassword`, `canPerformAction`). Estos métodos pertenecen naturalmente a sus respectivos objetos de dominio (`UserModel`, `UserRole`, `UserEmail`, `UserPassword`) o a servicios de dominio dedicados. La clase no tenía estado, nunca era instanciada, y su única función era coleccionar lógica dispersa sin cohesión. Además, no era utilizada en ningún lugar del codebase, siendo código muerto. Representa el anti-patrón de crear clases "Utils" para esconder lógica que no se sabe dónde poner.
-* **Solución:** Se eliminó completamente la clase `UserValidationUtils.java`. Esto fuerza a que la validación regrese a sus lugares correctos: reglas de negocio en los value objects del dominio, y verificaciones de estado/permisos en los servicios que las necesitan. Si en el futuro se requiere acceder a validaciones comunes, se crearán métodos en los objetos de dominio o se usarán servicios dedicados. Esta eliminación mejora la cohesión: cada objeto responsable de su propia validación.
 
 ## Regla 14: Ley de Deméter
 
 ### Violación 1
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
-* **Problema:** El método `getAndValidateUser` hacía `user.getPassword().verifyPlain(plainPassword)`, navegando a través del objeto intermedio `UserPassword` para acceder a su método `verifyPlain`. Esto viola la Ley de Deméter que establece: "habla solo con tus amigos directos, no con los amigos de tus amigos". El servicio no debe conocer la estructura interna de `UserModel` (que tiene un `UserPassword`) ni cómo verificar la contraseña internamente. Rompe el encapsulamiento y crea acoplamiento frágil.
-* **Solución:** Se agregó un método delegador `verifyPassword(String plainPassword)` en `UserModel` que encapsula la verificación. Ahora `LoginService` llama directamente a `user.verifyPassword(plainPassword)`, hablando solo con su "amigo directo" (`UserModel`). El método delegador internamente accede a `password.verifyPlain()`, manteniendo la responsabilidad de verificación dentro del agregado raíz. Esto reduce el acoplamiento y mejora el encapsulamiento.
+* **Problema:** El método navegaba profundamente en la estructura interna de `UserModel` encadenando llamadas (`user.getPassword().verifyPlain(plainPassword)`). Esto crea un alto acoplamiento, ya que la capa de aplicación asume y conoce cómo el modelo estructura internamente sus *Value Objects*.
+* **Solución:** Se aplicó la Ley de Deméter (o principio de menor conocimiento) delegando la validación directamente al objeto mediante `user.passwordMatches(plainPassword)`. Ahora el modelo encapsula su estado y la aplicación solo interactúa con su comportamiento expuesto.
 
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/mapper/UserPersistenceMapper.java`
-* **Problema:** El método `fromModelToDto` hacía múltiples llamadas encadenadas como `user.getId().value()`, `user.getName().value()`, etc., navegando a través de cada value object para extraer su valor primitivo. El mapper violaba la Ley de Deméter al necesitar conocer la estructura interna de `UserModel` (qué value objects contiene) y cómo acceder a sus valores. Esto crea acoplamiento fuerte: cualquier cambio en los value objects requeriría cambiar el mapper.
-* **Solución:** Se agregaron métodos delegadores en `UserModel`: `idValue()`, `nameValue()`, `emailValue()`, `passwordValue()` que extraen y retornan directamente los valores primitivos. Ahora el mapper llama a estos métodos en lugar de navegar al interior del objeto. El mapper habla solo con `UserModel` (su "amigo directo"), mientras que `UserModel` es responsable de proporcionar acceso a sus datos de forma segura y encapsulada.
 
-## Regla 16: Evitar condicionales repetitivas
+## Regla 17: Condición booleana compleja
 
 ### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
-* **Problema:** El método `getStatusLabel()` utilizaba una cascada larga de `if/else if` para mapear estados de usuario a sus etiquetas de presentación. Esta estructura crece linealmente con cada nuevo estado agregado, es repetitiva, difícil de mantener, y viola la intención: solo necesita buscar un valor en una tabla.
-* **Solución:** Se reemplazó la cascada de condicionales por un `Map<String, String>` estático (`STATUS_LABELS`) que agrupa todos los estados y sus etiquetas. El método ahora usa `getOrDefault()` para buscar la etiqueta o retornar un valor por defecto. Agregar un nuevo estado es ahora trivial: solo añadir una entrada al mapa, sin modificar lógica condicional.
-
-## Regla 9: Arquitectura Hexagonal — Dependencias hacia el centro
-
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
-* **Problema:** En el método `createUser`, el entrypoint construía directamente un `CreateUserCommand` del dominio de aplicación sin pasar por el mapper. Esto acopla la capa de infraestructura directamente con los objetos de transferencia de datos de la capa de aplicación, saltándose la responsabilidad del mapper que es justamente traducir entre las peticiones externas y los comandos internos.
-* **Solución:** Se utilizó el método estático `toCreateCommand(request)` de la clase `UserDesktopMapper` para delegar la creación del comando. Se eliminaron los comentarios relativos a la violación, manteniendo la capa de entrada aislada de los detalles de estructuración interna del dominio.
-
-### Violación 4
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
-* **Problema:** En el método `deleteUser`, el entrypoint construía directamente un `DeleteUserCommand` acoplando la infraestructura al dominio de aplicación en lugar de usar un mapper.
-* **Solución:** Se reemplazó la construcción directa por una llamada a `UserDesktopMapper.toDeleteCommand(id)`, delegando la responsabilidad de mapeo correctamente y limpiando los comentarios originales de la violación.
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
+* **Problema:** El método de validación contenía una expresión booleana redundante y larga (`user.getStatus() != ACTIVE || user.getStatus() == BLOCKED...`) que dificultaba la lectura y la comprensión rápida de la intención.
+* **Solución:** Se simplificó la lógica a una sola comprobación (`!= ACTIVE`) y se extrajo al método privado `ensureUserIsActive()`, mejorando drásticamente la legibilidad (Regla 17) y encapsulando parcialmente la regla de negocio (Regla 12).
