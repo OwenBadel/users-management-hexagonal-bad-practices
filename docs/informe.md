@@ -495,3 +495,8 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/Main.java`
 * **Problema:** El método `main()` realizaba múltiples responsabilidades: construir el contenedor de dependencias, crear la infraestructura de I/O (Scanner), instanciar el CLI y arrancarlo. Esto violaba el principio de responsabilidad única.
 * **Solución:** Se extrajo la construcción del CLI al método privado `buildCli()`, separando claramente las responsabilidades y permitiendo que `main()` sea una orquestación simple de alto nivel.
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** El método `save()` contenía tres comentarios redundantes que simplemente repetían lo obvio del código ("transformar el modelo...", "ejecutar la consulta...", "buscar y retornar...").
+* **Solución:** Se eliminaron todos los comentarios redundantes, dejando que el código y los nombres de método autodocumentado (`fromModelToDto`, `executeSave`, `findByIdOrFail`) comuniquen la intención de forma clara.
