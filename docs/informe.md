@@ -187,6 +187,11 @@
 * **Problema:** El método `shouldThrowWhenEmailNotFound()` no tenía la anotación `@DisplayName`.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() lanza InvalidCredentialsException cuando el email no está registrado")`.
 
+### Violación 15
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/domain/valueobject/UserIdTest.java`
+* **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y de Javadoc descriptivo.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (creación con trimming, excepciones en valores nulos y vacíos). Se agregó la anotación `@DisplayName("UserId")` a la clase.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
