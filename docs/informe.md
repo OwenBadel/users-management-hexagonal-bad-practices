@@ -369,3 +369,10 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
 
+
+## Regla 9: Separación de responsabilidades en mapeos (Hexagonal)
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** El método `login()` construía directamente la `LoginCommand` sin utilizar el mapper `UserDesktopMapper.toLoginCommand()`, violando la separación de responsabilidades de la arquitectura hexagonal. Todos los otros métodos del controlador utilizaban el mapper para construir sus comandos, pero este método lo hacía directamente.
+* **Solución:** Se reemplazó `new LoginCommand(request.email(), request.password())` por `UserDesktopMapper.toLoginCommand(request)`, delegando la transformación de datos al mapper y manteniendo la consistencia arquitectónica en toda la clase.

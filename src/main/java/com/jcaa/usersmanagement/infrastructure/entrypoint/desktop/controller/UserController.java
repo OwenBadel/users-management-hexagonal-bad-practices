@@ -66,8 +66,7 @@ public final class UserController {
   }
 
   public UserResponse login(final LoginRequest request) {
-    // VIOLACIÓN Regla 9 (Hexagonal): construye directamente el command de aplicación sin mapper.
-    final var command = new LoginCommand(request.email(), request.password());
+    final var command = UserDesktopMapper.toLoginCommand(request);
     final var user = loginUseCase.execute(command);
     return UserDesktopMapper.toResponse(user);
   }
