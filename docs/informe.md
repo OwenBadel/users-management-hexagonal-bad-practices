@@ -245,3 +245,8 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `EMAIL_EXISTS_MESSAGE`.
 
+### Violación 8
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserNotFoundException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
+
