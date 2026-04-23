@@ -69,8 +69,13 @@ class EmailNotificationServiceTest {
   @Test
   @DisplayName("notifyUserCreated() envía notificación al email correcto con asunto apropiado")
   void shouldSendCreatedNotificationToCorrectEmail() {
-    // VIOLACIÓN Regla 11: se eliminaron los comentarios Arrange–Act–Assert.
+    // Arrange
+    // (user ya está preparado en setUp)
+
+    // Act
     service.notifyUserCreated(user, PASSWORD);
+
+    // Assert
     verify(emailSenderPort)
         .send(
             argThat(

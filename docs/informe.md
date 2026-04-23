@@ -147,6 +147,11 @@
 * **Problema:** El método `shouldSendCreatedNotificationToCorrectEmail()` carecía de la anotación `@DisplayName`, incumpliendo la directiva de Regla 11.
 * **Solución:** Se agregó la anotación `@DisplayName("notifyUserCreated() envía notificación al email correcto con asunto apropiado")`, documentando claramente el comportamiento esperado del test.
 
+### Violación 7
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/EmailNotificationServiceTest.java`
+* **Problema:** El método `shouldSendCreatedNotificationToCorrectEmail()` carecía de la estructura estándar Arrange-Act-Assert, mezclando la ejecución del servicio con la validación sin separación clara de fases.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert` para dividir claramente el método. Se reorganizó el código manteniendo el setup implícito en Arrange y separando la invocación al servicio de las verificaciones.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
