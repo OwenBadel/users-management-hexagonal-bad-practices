@@ -250,3 +250,47 @@
 * **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
 
+## Regla 4: Estilo y Naming
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/model/EmailDestinationModel.java`
+* **Problema:** El método `validateNotBlank` utilizaba el operador `==` para comparar con `null` en lugar de usar `Objects.isNull()`, violando la directiva de Regla 4 que exige usar métodos de utilidad de Objects para comparaciones nulas.
+* **Solución:** Se agregó el import de `java.util.Objects` y se reemplazó `value == null` por `Objects.isNull(value)`, mejorando la claridad y consistencia del código.
+
+
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserEmailException.java`
+* **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, incluido un String literal dentro de `String.format()`.
+* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_EMAIL_MESSAGE` e `INVALID_FORMAT_MESSAGE`), centralizando los textos de error y facilitando su mantenimiento.
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserIdException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `EMPTY_ID_MESSAGE`, aplicando la misma pauta de centralización de textos de error.
+
+### Violación 4
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserNameException.java`
+* **Problema:** Los dos métodos factory contenían mensajes de error hardcodeados directamente, incluido un String literal dentro de `String.format()`.
+* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_NAME_MESSAGE` y `TOO_SHORT_MESSAGE`), centralizando los textos y mejorando la mantenibilidad.
+
+### Violación 5
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserRoleException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_ROLE_MESSAGE`.
+
+### Violación 6
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserStatusException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_STATUS_MESSAGE`.
+
+### Violación 7
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserAlreadyExistsException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `EMAIL_EXISTS_MESSAGE`.
+
+### Violación 8
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserNotFoundException.java`
+* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
+* **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
+
