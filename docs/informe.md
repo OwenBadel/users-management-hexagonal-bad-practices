@@ -222,6 +222,11 @@
 * **Problema:** La clase test carecía de Javadoc descriptivo documentando los casos cubiertos.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos: creación exitosa de conexión JDBC y manejo de SQLException con conversión a PersistenceException.
 
+### Violación 22
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/mapper/UserPersistenceMapperTest.java`
+* **Problema:** La clase test carecía de Javadoc descriptivo.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos: mapeo bidireccional entre UserModel y UserEntity, mapeo desde ResultSet a UserModel, conversión de roles y estados.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
