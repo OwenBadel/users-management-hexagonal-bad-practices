@@ -232,6 +232,11 @@
 * **Problema:** El método `shouldThrowWhenPasswordIsWrong()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11 que exige documentar claramente la intención de cada test con un nombre legible para reportes y ejecuciones con filtros.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() lanza InvalidCredentialsException cuando la contraseña es incorrecta")` al método, permitiendo que el framework JUnit y herramientas de reporting muestren una descripción clara del comportamiento esperado.
 
+### Violación 24
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/CreateUserServiceTest.java`
+* **Problema:** El método `shouldThrowWhenEmailAlreadyExists()` carecía de la anotación `@DisplayName` y tenía el patrón Arrange-Act-Assert mezclado sin separación mediante comentarios, dificultando la lectura de las tres fases del test.
+* **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserAlreadyExistsException cuando el email ya existe")` y se insertaron comentarios `// Arrange` y `// Act & Assert` para dividir claramente las fases del test, mejorando la estructura y legibilidad.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 

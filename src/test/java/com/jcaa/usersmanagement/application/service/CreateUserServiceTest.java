@@ -82,8 +82,9 @@ class CreateUserServiceTest {
   }
 
   @Test
+  @DisplayName("execute() lanza UserAlreadyExistsException cuando el email ya existe")
   void shouldThrowWhenEmailAlreadyExists() {
-    // VIOLACIÓN Regla 11: Arrange y Act–Assert mezclados sin separación ni comentarios AAA.
+    // Arrange
     final CreateUserCommand command =
         new CreateUserCommand("u-02", "Jane Doe", "jane@example.com", "Pass5678", "MEMBER");
     final UserModel existing =
@@ -95,6 +96,8 @@ class CreateUserServiceTest {
             UserRole.MEMBER,
             UserStatus.ACTIVE);
     when(getUserByEmailPort.getByEmail(any())).thenReturn(Optional.of(existing));
+
+    // Act & Assert
     assertThrows(UserAlreadyExistsException.class, () -> service.execute(command));
     verify(saveUserPort, never()).save(any());
     verify(emailNotificationService, never()).notifyUserCreated(any(), any());
