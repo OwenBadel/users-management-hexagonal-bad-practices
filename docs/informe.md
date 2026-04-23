@@ -436,3 +436,14 @@
 * **Problema:** El método factory `becauseLoadFailed()` contenía un mensaje de error hardcodeado directamente como String literal: `"Failed to load the application configuration."`.
 * **Solución:** Se extrajo el mensaje en la constante privada estática `LOAD_FAILED_MESSAGE`, centralizando el valor en un único lugar.
 
+
+### Violación 8
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/config/DatabaseConnectionFactory.java`
+* **Problema:** La clase `DatabaseConnectionFactory` contenía solo un método público que no utilizaba estado de instancia, pero NO estaba anotada con `@UtilityClass` de Lombok y el método NO era `static`. Esto permitía instanciación innecesaria.
+* **Solución:** Se agregó la anotación `@UtilityClass` y se convirtió `createConnection()` a `static`. Se eliminó la instanciación en `DependencyContainer` y en `DatabaseConnectionFactoryTest`, reemplazando con invocaciones estáticas.
+
+### Violación 9
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/exception/PersistenceException.java`
+* **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals.
+* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas con nombres descriptivos.
+
