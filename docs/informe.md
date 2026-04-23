@@ -142,6 +142,11 @@
 * **Problema:** La clase test carecía de Javadoc descriptivo, haciendo que los lectores no supieran qué casos de uso o escenarios estaban siendo cubiertos por los tests.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos: notificación exitosa de usuario creado y actualizado, validación del destinatario correcto, y manejo de excepciones del puerto de envío de email.
 
+### Violación 6
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/EmailNotificationServiceTest.java`
+* **Problema:** El método `shouldSendCreatedNotificationToCorrectEmail()` carecía de la anotación `@DisplayName`, incumpliendo la directiva de Regla 11.
+* **Solución:** Se agregó la anotación `@DisplayName("notifyUserCreated() envía notificación al email correcto con asunto apropiado")`, documentando claramente el comportamiento esperado del test.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
