@@ -78,8 +78,8 @@ class LoginServiceTest {
     assertThrows(InvalidCredentialsException.class, () -> service.execute(command));
   }
 
-  // VIOLACIÓN Regla 11: falta @DisplayName en el método.
   @Test
+  @DisplayName("execute() lanza InvalidCredentialsException cuando la contraseña es incorrecta")
   void shouldThrowWhenPasswordIsWrong() {
     final LoginCommand command = new LoginCommand(EMAIL, "WrongPass99");
 

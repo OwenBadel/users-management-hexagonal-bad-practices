@@ -227,6 +227,11 @@
 * **Problema:** La clase test carecía de Javadoc descriptivo.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos: mapeo bidireccional entre UserModel y UserEntity, mapeo desde ResultSet a UserModel, conversión de roles y estados.
 
+### Violación 23
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/LoginServiceTest.java`
+* **Problema:** El método `shouldThrowWhenPasswordIsWrong()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11 que exige documentar claramente la intención de cada test con un nombre legible para reportes y ejecuciones con filtros.
+* **Solución:** Se agregó la anotación `@DisplayName("execute() lanza InvalidCredentialsException cuando la contraseña es incorrecta")` al método, permitiendo que el framework JUnit y herramientas de reporting muestren una descripción clara del comportamiento esperado.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
