@@ -172,6 +172,11 @@
 * **Problema:** El método `shouldReturnUserWhenFound()` carecía de la estructura estándar Arrange-Act-Assert, y usaba aserciones débiles: `assertTrue(result != null)` en lugar de `assertNotNull(result)` y `assertTrue(result == expected)` en lugar de `assertSame(expected, result)`.
 * **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(result != null)` por `assertNotNull(result)` y `assertTrue(result == expected)` por `assertSame(expected, result)`.
 
+### Violación 12
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/GetUserByIdServiceTest.java`
+* **Problema:** El método `shouldThrowWhenUserNotFound()` no tenía la anotación `@DisplayName`.
+* **Solución:** Se agregó la anotación `@DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 

@@ -70,8 +70,8 @@ class GetUserByIdServiceTest {
     assertSame(expected, result);
   }
 
-  // VIOLACIÓN Regla 11: falta @DisplayName en el método.
   @Test
+  @DisplayName("execute() lanza UserNotFoundException cuando el usuario no existe")
   void shouldThrowWhenUserNotFound() {
     final GetUserByIdQuery query = new GetUserByIdQuery("no-existe");
     when(getUserByIdPort.getById(any())).thenReturn(Optional.empty());
