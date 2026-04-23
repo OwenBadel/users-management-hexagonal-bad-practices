@@ -157,6 +157,11 @@
 * **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y los métodos no tenían @DisplayName, lo que hace que los reportes y ejecuciones filtradas muestren solo nombres técnicos sin documentación del comportamiento.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (creación exitosa, email duplicado, validación de command, notificación). Se agregó la anotación `@DisplayName("CreateUserService")` a la clase para proporcionar un nombre legible en reportes.
 
+### Violación 9
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/CreateUserServiceTest.java`
+* **Problema:** El método `shouldSaveUserAndNotifyWhenEmailIsNew()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11.
+* **Solución:** Se agregó la anotación `@DisplayName("execute() guarda el usuario y notifica cuando el email es nuevo")` para documentar claramente el comportamiento esperado del test.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 

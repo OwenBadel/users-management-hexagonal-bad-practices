@@ -55,8 +55,7 @@ class CreateUserServiceTest {
   }
 
   @Test
-  // VIOLACIÓN Regla 11: no hay comentarios de estructura Arrange–Act–Assert.
-  // La regla exige que los bloques estén documentados con // Arrange, // Act, // Assert.
+  @DisplayName("execute() guarda el usuario y notifica cuando el email es nuevo")
   void shouldSaveUserAndNotifyWhenEmailIsNew() {
     final CreateUserCommand command =
         new CreateUserCommand("u-01", "John Arrieta", "john@example.com", "Pass1234", "ADMIN");
