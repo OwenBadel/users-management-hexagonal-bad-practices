@@ -73,7 +73,10 @@
 * **Problema:** El mismo concepto (email del usuario) recibía múltiples nombres sin justificación en fromUpdateCommandToModel.
 * **Solución:** Se unificaron las variables bajo el nombre `userEmail` para mantener la consistencia semántica en toda la clase.
 
-
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/Main.java`
+* **Problema:** La clase Main utilizaba `org.slf4j.Logger` (SLF4J), mientras que todo el resto del proyecto usa `java.util.logging.Logger` (via @Log de Lombok). El mismo concepto se resolvía con dos frameworks distintos sin justificación, violando la consistencia semántica.
+* **Solución:** Se reemplazó SLF4J por `@Log` de Lombok (java.util.logging), manteniendo la consistencia con el estándar del proyecto y eliminando la dependencia innecesaria de SLF4J.
 
 
 ## Regla 15 - Inmutabilidad como preferencia
