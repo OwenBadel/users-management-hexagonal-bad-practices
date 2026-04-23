@@ -202,6 +202,11 @@
 * **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y de Javadoc descriptivo.
 * **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (validación de longitud mínima, trimming, excepciones). Se agregó la anotación `@DisplayName("UserName")`.
 
+### Violación 18
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/domain/valueobject/UserNameTest.java`
+* **Problema:** El método parametrizado `shouldValidateUserNameMinimumLength` carecía de estructura AAA y usaba `assertTrue(x.equals(y))` en lugar de `assertEquals(x, y)`.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(correctUserName.equals(userNameVo.toString()))` por `assertEquals(correctUserName, userNameVo.toString())`.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 

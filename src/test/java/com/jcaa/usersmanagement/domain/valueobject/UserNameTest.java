@@ -20,11 +20,14 @@ class UserNameTest {
   @ParameterizedTest
   @ValueSource(strings = {"John Arrieta", "   John Arrieta   ", "John Arrieta \t"})
   void shouldValidateUserNameMinimumLength(final String userName) {
-    // VIOLACIÓN Regla 11: se eliminaron comentarios Arrange–Act–Assert.
-    // VIOLACIÓN Regla 11: assertTrue(x.equals(y)) en lugar de assertEquals(x, y).
+    // Arrange
     final String correctUserName = "John Arrieta";
+
+    // Act
     final UserName userNameVo = new UserName(userName);
-    assertTrue(correctUserName.equals(userNameVo.toString()));
+
+    // Assert
+    assertEquals(correctUserName, userNameVo.toString());
   }
 
   // -- Flujo con excepciones y ramas de validación ---
