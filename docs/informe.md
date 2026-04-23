@@ -152,6 +152,11 @@
 * **Problema:** El método `shouldSendCreatedNotificationToCorrectEmail()` carecía de la estructura estándar Arrange-Act-Assert, mezclando la ejecución del servicio con la validación sin separación clara de fases.
 * **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert` para dividir claramente el método. Se reorganizó el código manteniendo el setup implícito en Arrange y separando la invocación al servicio de las verificaciones.
 
+### Violación 8
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/CreateUserServiceTest.java`
+* **Problema:** La clase test carecía de la anotación `@DisplayName` a nivel de clase y los métodos no tenían @DisplayName, lo que hace que los reportes y ejecuciones filtradas muestren solo nombres técnicos sin documentación del comportamiento.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos cubiertos (creación exitosa, email duplicado, validación de command, notificación). Se agregó la anotación `@DisplayName("CreateUserService")` a la clase para proporcionar un nombre legible en reportes.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 

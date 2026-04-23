@@ -20,13 +20,19 @@ import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-// VIOLACIÓN Regla 11: se eliminó @DisplayName de la clase y de los métodos.
-// Los tests deben tener nombres descriptivos con @DisplayName para documentar el comportamiento.
+/**
+ * Tests para CreateUserService.
+ *
+ * <p>Cubre: creación exitosa de usuario, validación de email duplicado, validación del command,
+ * y notificación después de crear el usuario.
+ */
+@DisplayName("CreateUserService")
 @ExtendWith(MockitoExtension.class)
 class CreateUserServiceTest {
 
