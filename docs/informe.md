@@ -217,6 +217,11 @@
 * **Problema:** El método parametrizado `shouldNormalizeAndHashPassword` carecía de `@DisplayName`, estructura AAA y usaba `assertTrue(result.value() != null)` en lugar de `assertNotNull(result.value())`.
 * **Solución:** Se agregó la anotación `@DisplayName("Normaliza espacios en blanco y hashea la contraseña correctamente")`. Se insertaron comentarios `// Arrange`, `// Act` y `// Assert`. Se reemplazó `assertTrue(result.value() != null)` por `assertNotNull(result.value())`.
 
+### Violación 21
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/config/DatabaseConnectionFactoryTest.java`
+* **Problema:** La clase test carecía de Javadoc descriptivo documentando los casos cubiertos.
+* **Solución:** Se agregó el Javadoc de clase documentando los casos: creación exitosa de conexión JDBC y manejo de SQLException con conversión a PersistenceException.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
