@@ -57,6 +57,7 @@ class CreateUserServiceTest {
   @Test
   @DisplayName("execute() guarda el usuario y notifica cuando el email es nuevo")
   void shouldSaveUserAndNotifyWhenEmailIsNew() {
+    // Arrange
     final CreateUserCommand command =
         new CreateUserCommand("u-01", "John Arrieta", "john@example.com", "Pass1234", "ADMIN");
     final UserModel savedUser =
@@ -69,11 +70,13 @@ class CreateUserServiceTest {
             UserStatus.PENDING);
     when(getUserByEmailPort.getByEmail(any())).thenReturn(Optional.empty());
     when(saveUserPort.save(any())).thenReturn(savedUser);
+
+    // Act
     final UserModel result = service.execute(command);
-    // VIOLACIÓN Regla 11: se usa assertTrue(x != null) en lugar de assertNotNull(x).
-    // La regla indica usar las últimas aserciones — assertNotNull es más expresivo y correcto.
-    assertTrue(result != null);
-    assertTrue(result.getId().value().equals("u-01"));
+
+    // Assert
+    assertNotNull(result);
+    assertEquals("u-01", result.getId().value());
     verify(saveUserPort).save(any(UserModel.class));
     verify(emailNotificationService).notifyUserCreated(savedUser, "Pass1234");
   }

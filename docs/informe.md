@@ -162,6 +162,11 @@
 * **Problema:** El método `shouldSaveUserAndNotifyWhenEmailIsNew()` no tenía la anotación `@DisplayName`, incumpliendo la directiva de Regla 11.
 * **Solución:** Se agregó la anotación `@DisplayName("execute() guarda el usuario y notifica cuando el email es nuevo")` para documentar claramente el comportamiento esperado del test.
 
+### Violación 10
+* **Archivo:** `src/test/java/com/jcaa/usersmanagement/application/service/CreateUserServiceTest.java`
+* **Problema:** El método `shouldSaveUserAndNotifyWhenEmailIsNew()` mezclaba Arrange con Act y Assert sin separación, y usaba aserciones débiles como `assertTrue(result != null)` en lugar de `assertNotNull(result)` y `assertTrue(result.getId().value().equals("u-01"))` en lugar de `assertEquals`.
+* **Solución:** Se insertaron comentarios `// Arrange`, `// Act` y `// Assert` para dividir claramente las fases. Se reemplazó `assertTrue(result != null)` por `assertNotNull(result)` y `assertTrue(x.equals(y))` por `assertEquals(x, y)`, utilizando aserciones más expresivas y correctas según JUnit 5.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
