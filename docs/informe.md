@@ -398,3 +398,9 @@
 * **Problema:** La clase `EmailSenderException` exponía constructores públicos, permitiendo que cualquier código creara excepciones con mensajes arbitrarios sin restricción. Esto violaba el control sobre cómo se instancia la excepción y hacía que el contrato de mensajes de error fuera frágil.
 * **Solución:** Se convirtieron ambos constructores públicos a privados. Ahora todas las instancias deben crearse a través de los factory methods (`becauseSmtpFailed()` y `becauseSendFailed()`), centralizando el control sobre los mensajes de error permitidos y mejorando la cohesión de la clase.
 
+
+### Violación 7
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/handler/UpdateUserHandler.java`
+* **Problema:** El método `handle()` utilizaba variables con nombres abreviados no descriptivos: `pw` en lugar de `password` y `upd` en lugar de `updated`. Estas abreviaturas reducen la legibilidad y obligan al lector a descifrar su significado.
+* **Solución:** Se renombraron las variables a sus formas completas y descriptivas: `password` y `updated`, mejorando la claridad del código sin sacrificar concisión.
+
