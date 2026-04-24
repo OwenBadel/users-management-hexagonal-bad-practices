@@ -545,3 +545,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
 * **Problema:** El contenedor dependía directamente del tipo concreto `UserRepositoryMySQL` en el ensamblaje de casos de uso, propagando el conocimiento de la implementación concreta y dificultando reemplazar el adaptador de persistencia sin tocar varias líneas del cableado.
 * **Solución:** Se introdujo un ensamblado intermedio tipado por puertos (`UserRepositoryPorts`) y se movió la creación del repositorio concreto al método `buildUserRepositoryPorts(...)`. El wiring de servicios ahora consume únicamente interfaces de puertos, reduciendo el acoplamiento a concreciones y mejorando la refactorabilidad.
+
+
+## Regla 16: Evitar condicionales repetitivas
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
+* **Problema:** El archivo mantenía comentarios de violación de Regla 16 que describían una cadena condicional extensa, aunque la implementación real ya estaba resuelta con un `Map` de etiquetas. Esta desalineación entre comentario y código introduce ruido y confusión sobre el estado real de la regla.
+* **Solución:** Se eliminaron los comentarios de violación asociados a Regla 16, dejando el código limpio y consistente con la implementación actual basada en `STATUS_LABELS`.

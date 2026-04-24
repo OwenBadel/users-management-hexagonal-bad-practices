@@ -27,7 +27,6 @@ public final class UserResponsePrinter {
     console.printf(ROW_FORMAT, "Name",   response.name());
     console.printf(ROW_FORMAT, "Email",  response.email());
     console.printf(ROW_FORMAT, "Role",   response.role());
-    // Clean Code - Regla 16: se llama al auxiliar que tiene la cadena if/else larga
     console.printf(ROW_FORMAT, "Status", getStatusLabel(response.status()));
     console.println(SEPARATOR);
   }
@@ -54,9 +53,6 @@ public final class UserResponsePrinter {
     console.println(summary.toString());
   }
 
-  // Clean Code - Regla 16 (evitar condicionales repetitivas cuando el polimorfismo aporta claridad):
-  // Se encapsuló la cadena de if/else en un Map, eliminando la lógica condicional.
-  // Agregar un nuevo estado es trivial: solo se añade una entrada al mapa.
   private static String getStatusLabel(final String status) {
     return STATUS_LABELS.getOrDefault(status, "Estado desconocido");
   }
