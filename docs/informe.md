@@ -513,3 +513,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
 * **Problema:** La construcción de dependencias exigía un orden implícito y frágil (`init()` antes de usar el repositorio). Este acoplamiento temporal no estaba protegido por el diseño y facilitaba usos incorrectos al depender de pasos manuales en secuencia.
 * **Solución:** Se eliminó la llamada explícita a `userRepository.init()` junto con su comentario de violación asociado a Regla 19. Con esto, el flujo de inicialización deja de depender de un paso extra de orden obligatorio en el contenedor y queda más robusto frente a errores de uso.
+
+
+## Regla 27: Código listo para leer
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
+* **Problema:** El método `printSummary()` usaba una combinación innecesariamente compleja de `Optional`, `stream`, `reduce` y conversiones intermedias para una tarea simple (imprimir resumen o mensaje de vacío), dificultando la lectura y el mantenimiento.
+* **Solución:** Se reescribió `printSummary()` con flujo imperativo claro: validación temprana de lista vacía, construcción explícita del resumen con `StringBuilder` y salida final por consola. También se eliminó la importación de `Optional` y el comentario de violación para dejar el código limpio.

@@ -3,7 +3,6 @@ package com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.io;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.dto.UserResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -42,21 +41,17 @@ public final class UserResponsePrinter {
     users.forEach(this::print);
   }
 
-  // Clean Code - Regla 27 (código listo para leer, no solo para compilar):
-  // Este método usa Optional + streams anidados + reduce para hacer algo que
-  // puede describirse como "mostrar los usuarios o un aviso de vacío".
-  // La implementación castiga al lector sin aportar ningún beneficio real.
-  // Sin explicación oral del autor es imposible deducir su intención en segundos.
   public void printSummary(final List<UserResponse> users) {
-    Optional.ofNullable(users)
-        .filter(list -> !list.isEmpty())
-        .map(list -> list.stream()
-            .reduce(
-                new StringBuilder(),
-                (sb, u) -> sb.append(String.format("  %s (%s)%n", u.name(), getStatusLabel(u.status()))),
-                StringBuilder::append))
-        .map(StringBuilder::toString)
-        .ifPresentOrElse(console::println, () -> console.println("  No users found."));
+    if (users == null || users.isEmpty()) {
+      console.println("  No users found.");
+      return;
+    }
+
+    final StringBuilder summary = new StringBuilder();
+    for (final UserResponse user : users) {
+      summary.append(String.format("  %s (%s)%n", user.name(), getStatusLabel(user.status())));
+    }
+    console.println(summary.toString());
   }
 
   // Clean Code - Regla 16 (evitar condicionales repetitivas cuando el polimorfismo aporta claridad):
