@@ -57,10 +57,6 @@ public final class DependencyContainer {
     //   2. Si se quiere borrar init(), hay que rastrear todos los lugares que lo llaman.
     //   La estructura del código no permite intercambiar o borrar partes sin
     //   ajustar múltiples puntos de acoplamiento.
-    // Clean Code - Regla 19 (temporal coupling): además, este patrón init() → uso
-    // establece un orden implícito frágil que el diseño no encapsula ni protege.
-    userRepository.init();
-
     final JavaMailEmailSenderAdapter emailSender =
         new JavaMailEmailSenderAdapter(buildSmtpConfig(properties));
     final EmailNotificationService emailNotification = new EmailNotificationService(emailSender);

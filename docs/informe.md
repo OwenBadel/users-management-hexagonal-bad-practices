@@ -505,3 +505,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
 * **Problema:** El método `saveWithFields()` contenía dos comentarios redundantes ("verificar que todos los parámetros...", "construir y guardar el modelo") que repetían lo obvio del código.
 * **Solución:** Se eliminaron los comentarios redundantes. El código ahora se explica por sí mismo mediante nombres claros (validación nula explícita, excepción descriptiva).
+
+
+## Regla 19: Evitar temporal coupling
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
+* **Problema:** La construcción de dependencias exigía un orden implícito y frágil (`init()` antes de usar el repositorio). Este acoplamiento temporal no estaba protegido por el diseño y facilitaba usos incorrectos al depender de pasos manuales en secuencia.
+* **Solución:** Se eliminó la llamada explícita a `userRepository.init()` junto con su comentario de violación asociado a Regla 19. Con esto, el flujo de inicialización deja de depender de un paso extra de orden obligatorio en el contenedor y queda más robusto frente a errores de uso.
