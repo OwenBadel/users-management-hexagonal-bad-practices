@@ -16,8 +16,9 @@ public final class Main {
 
   private static UserManagementCli buildCli() {
     final DependencyContainer container = new DependencyContainer();
-    try (final Scanner scanner = new Scanner(System.in)) {
-      return new UserManagementCli(container.userController(), new ConsoleIO(scanner, System.out));
-    }
+    // Se elimina el try-with-resources. El Scanner de System.in debe 
+    // permanecer abierto durante todo el ciclo de vida de la aplicación CLI.
+    final Scanner scanner = new Scanner(System.in);
+    return new UserManagementCli(container.userController(), new ConsoleIO(scanner, System.out));
   }
 }
