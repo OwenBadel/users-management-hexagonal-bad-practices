@@ -513,3 +513,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
 * **Problema:** El método `findUserById` operaba directamente con un `String` desnudo para el identificador, retrasando la validación semántica de dominio y permitiendo que valores inválidos avanzaran más de lo necesario en el flujo.
 * **Solución:** Se encapsuló el identificador al inicio del método mediante `new UserId(id)` y se utilizó su valor normalizado para construir el query. Con esto, la validación del id ocurre en el borde del método y se reduce el uso directo de primitivos para un concepto de dominio.
+
+
+## Regla 23: Minimizar conocimiento disperso
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/valueobject/UserEmail.java`
+* **Problema:** El archivo mantenía una anotación de violación que afirmaba dispersión de la lógica de validación de email en utilidades externas ya inexistentes, generando documentación técnica desactualizada y ruido en el código fuente.
+* **Solución:** Se eliminó el bloque de comentario de violación obsoleto en `UserEmail`, dejando la validación encapsulada y el archivo consistente con el estado real del código.
