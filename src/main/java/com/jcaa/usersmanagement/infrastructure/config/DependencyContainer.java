@@ -6,6 +6,12 @@ import com.jcaa.usersmanagement.application.port.in.GetAllUsersUseCase;
 import com.jcaa.usersmanagement.application.port.in.GetUserByIdUseCase;
 import com.jcaa.usersmanagement.application.port.in.LoginUseCase;
 import com.jcaa.usersmanagement.application.port.in.UpdateUserUseCase;
+import com.jcaa.usersmanagement.application.port.out.DeleteUserPort;
+import com.jcaa.usersmanagement.application.port.out.GetAllUsersPort;
+import com.jcaa.usersmanagement.application.port.out.GetUserByEmailPort;
+import com.jcaa.usersmanagement.application.port.out.GetUserByIdPort;
+import com.jcaa.usersmanagement.application.port.out.SaveUserPort;
+import com.jcaa.usersmanagement.application.port.out.UpdateUserPort;
 import com.jcaa.usersmanagement.application.service.CreateUserService;
 import com.jcaa.usersmanagement.application.service.DeleteUserService;
 import com.jcaa.usersmanagement.application.service.EmailNotificationService;
@@ -40,23 +46,20 @@ public final class DependencyContainer {
 
   private final UserController userController;
 
+  private record UserRepositoryPorts(
+      SaveUserPort saveUserPort,
+      UpdateUserPort updateUserPort,
+      DeleteUserPort deleteUserPort,
+      GetUserByIdPort getUserByIdPort,
+      GetUserByEmailPort getUserByEmailPort,
+      GetAllUsersPort getAllUsersPort) {
+  }
+
   public DependencyContainer() {
     final AppProperties properties = new AppProperties();
 
     final Connection connection = buildDatabaseConnection(properties);
-    final UserRepositoryMySQL userRepository = new UserRepositoryMySQL(connection);
-
-    // Clean Code - Regla 22 (el código debe ser fácil de borrar y refactorizar):
-    // Para llamar a init() es obligatorio tener la referencia como tipo concreto
-    // UserRepositoryMySQL — ninguna de las interfaces que implementa (SaveUserPort,
-    // GetUserByIdPort, etc.) expone init().
-    // Esto crea un acoplamiento rígido e inesperado:
-    //   1. Si se quiere reemplazar UserRepositoryMySQL por otra implementación,
-    //      hay que tocar también DependencyContainer y asegurarse de que la nueva
-    //      clase también tenga init(), o rediseñar el flujo aquí.
-    //   2. Si se quiere borrar init(), hay que rastrear todos los lugares que lo llaman.
-    //   La estructura del código no permite intercambiar o borrar partes sin
-    //   ajustar múltiples puntos de acoplamiento.
+    final UserRepositoryPorts userRepositoryPorts = buildUserRepositoryPorts(connection);
     final JavaMailEmailSenderAdapter emailSender =
         new JavaMailEmailSenderAdapter(buildSmtpConfig(properties));
     final EmailNotificationService emailNotification = new EmailNotificationService(emailSender);
@@ -65,14 +68,29 @@ public final class DependencyContainer {
     final Validator validator = ValidatorProvider.buildValidator();
 
     final CreateUserUseCase createUserUseCase =
-        new CreateUserService(userRepository, userRepository, emailNotification, validator);
+      new CreateUserService(
+        userRepositoryPorts.saveUserPort(),
+        userRepositoryPorts.getUserByEmailPort(),
+        emailNotification,
+        validator);
     final UpdateUserUseCase updateUserUseCase =
-        new UpdateUserService(userRepository, userRepository, userRepository, emailNotification, validator);
+      new UpdateUserService(
+        userRepositoryPorts.updateUserPort(),
+        userRepositoryPorts.getUserByIdPort(),
+        userRepositoryPorts.getUserByEmailPort(),
+        emailNotification,
+        validator);
     final DeleteUserUseCase deleteUserUseCase =
-        new DeleteUserService(userRepository, userRepository, validator);
-    final GetUserByIdUseCase getUserByIdUseCase = new GetUserByIdService(userRepository, validator);
-    final GetAllUsersUseCase getAllUsersUseCase = new GetAllUsersService(userRepository);
-    final LoginUseCase loginUseCase = new LoginService(userRepository, validator);
+      new DeleteUserService(
+        userRepositoryPorts.deleteUserPort(),
+        userRepositoryPorts.getUserByIdPort(),
+        validator);
+    final GetUserByIdUseCase getUserByIdUseCase =
+      new GetUserByIdService(userRepositoryPorts.getUserByIdPort(), validator);
+    final GetAllUsersUseCase getAllUsersUseCase =
+      new GetAllUsersService(userRepositoryPorts.getAllUsersPort());
+    final LoginUseCase loginUseCase =
+      new LoginService(userRepositoryPorts.getUserByEmailPort(), validator);
 
     this.userController =
         new UserController(
@@ -86,6 +104,17 @@ public final class DependencyContainer {
 
   public UserController userController() {
     return userController;
+  }
+
+  private static UserRepositoryPorts buildUserRepositoryPorts(final Connection connection) {
+    final UserRepositoryMySQL repository = new UserRepositoryMySQL(connection);
+    return new UserRepositoryPorts(
+        repository,
+        repository,
+        repository,
+        repository,
+        repository,
+        repository);
   }
 
   private static Connection buildDatabaseConnection(final AppProperties properties) {

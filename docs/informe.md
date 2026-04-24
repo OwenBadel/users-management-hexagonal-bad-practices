@@ -537,3 +537,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
 * **Problema:** La clase exponía un método alternativo `saveWithFields(...)` con múltiples parámetros primitivos relacionados, lo que rompe cohesión del contrato y dificulta evolución y validación del modelo.
 * **Solución:** Se eliminó `saveWithFields(...)` junto con su comentario de violación. El repositorio conserva como API de persistencia el método `save(UserModel)`, que encapsula correctamente los datos del usuario en un único objeto de dominio.
+
+
+## Regla 22: Código fácil de borrar y refactorizar
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
+* **Problema:** El contenedor dependía directamente del tipo concreto `UserRepositoryMySQL` en el ensamblaje de casos de uso, propagando el conocimiento de la implementación concreta y dificultando reemplazar el adaptador de persistencia sin tocar varias líneas del cableado.
+* **Solución:** Se introdujo un ensamblado intermedio tipado por puertos (`UserRepositoryPorts`) y se movió la creación del repositorio concreto al método `buildUserRepositoryPorts(...)`. El wiring de servicios ahora consume únicamente interfaces de puertos, reduciendo el acoplamiento a concreciones y mejorando la refactorabilidad.
