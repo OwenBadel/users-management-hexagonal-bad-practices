@@ -529,3 +529,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
 * **Problema:** La clase exponía un estado y una API de inicialización (`initialized` e `init()`) que imponían un orden implícito de uso, generando acoplamiento temporal innecesario y un contrato frágil para consumidores.
 * **Solución:** Se eliminaron el flag `initialized`, el método `init()` y sus comentarios de violación asociados. El repositorio queda sin pasos previos obligatorios de inicialización manual, reduciendo el acoplamiento temporal y simplificando su uso.
+
+
+## Regla 5: Pocos parámetros por función
+
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** La clase exponía un método alternativo `saveWithFields(...)` con múltiples parámetros primitivos relacionados, lo que rompe cohesión del contrato y dificulta evolución y validación del modelo.
+* **Solución:** Se eliminó `saveWithFields(...)` junto con su comentario de violación. El repositorio conserva como API de persistencia el método `save(UserModel)`, que encapsula correctamente los datos del usuario en un único objeto de dominio.
