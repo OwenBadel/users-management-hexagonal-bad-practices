@@ -521,3 +521,11 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
 * **Problema:** El método `printSummary()` usaba una combinación innecesariamente compleja de `Optional`, `stream`, `reduce` y conversiones intermedias para una tarea simple (imprimir resumen o mensaje de vacío), dificultando la lectura y el mantenimiento.
 * **Solución:** Se reescribió `printSummary()` con flujo imperativo claro: validación temprana de lista vacía, construcción explícita del resumen con `StringBuilder` y salida final por consola. También se eliminó la importación de `Optional` y el comentario de violación para dejar el código limpio.
+
+
+## Regla 19: Evitar temporal coupling
+
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** La clase exponía un estado y una API de inicialización (`initialized` e `init()`) que imponían un orden implícito de uso, generando acoplamiento temporal innecesario y un contrato frágil para consumidores.
+* **Solución:** Se eliminaron el flag `initialized`, el método `init()` y sus comentarios de violación asociados. El repositorio queda sin pasos previos obligatorios de inicialización manual, reduciendo el acoplamiento temporal y simplificando su uso.
