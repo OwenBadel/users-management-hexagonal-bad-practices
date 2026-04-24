@@ -19,9 +19,6 @@ public final class UserDesktopMapper {
     // clase utilitaria: no se permite instanciar
   }
 
-  // Regla 4 (Clean Code): los métodos públicos van primero; el auxiliar privado
-  // aparece al final, cerca del método público que lo invoca.
-
   public static CreateUserCommand toCreateCommand(final CreateUserRequest request) {
     return new CreateUserCommand(
         request.id(), request.name(), request.email(), request.password(), request.role());
@@ -63,9 +60,6 @@ public final class UserDesktopMapper {
     return users.stream().map(UserDesktopMapper::toResponse).toList();
   }
 
-  // Regla 21 (Clean Code): el auxiliar privado lanza una excepción directamente en lugar
-  // de retornar un código de error (-1). El nombre expresa la intención ("requireValidId"),
-  // y el contrato de salida es claro: o pasa sin error o lanza excepción.
   private static void requireValidId(final String id) {
     if (id == null || id.isBlank()) {
       throw new IllegalArgumentException("ID inválido");
