@@ -242,6 +242,11 @@
 
 ## Regla 17: Condición booleana compleja
 
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
+* **Problema:** El método de validación contenía una expresión booleana redundante y larga (`user.getStatus() != ACTIVE || user.getStatus() == BLOCKED...`) que dificultaba la lectura y la comprensión rápida de la intención.
+* **Solución:** Se simplificó la lógica a una sola comprobación (`!= ACTIVE`) y se extrajo al método privado `ensureUserIsActive()`, mejorando drásticamente la legibilidad (Regla 17) y encapsulando parcialmente la regla de negocio (Regla 12).
+
 ### Violación 2
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/UpdateUserService.java`
 * **Problema:** El método `ensureEmailIsNotTakenByAnotherUser()` contenía una condición booleana monumental e ilegible que llamaba al mismo repositorio 5 veces con lógica redundante y difícil de comprender: (A && B && C) || (A && D) donde A = getByEmail().isPresent().
@@ -262,6 +267,11 @@
 * **Problema:** El método `main()` estaba acoplado directamente a clases concretas (DependencyContainer, UserManagementCli, ConsoleIO). Si se quisiera cambiar el entrypoint (de CLI a GUI), habría que editar el punto de entrada de la aplicación. No había abstracción que protegiera este acoplamiento.
 * **Solución:** Se refactorizó para extraer la lógica de construcción del CLI a `buildCli()`, encapsulando el acoplamiento en un método específico y dejando `main()` libre de detalles de implementación. Ahora si se cambia el tipo de CLI, solo buildCli() necesita modificarse.
 
+### Violación 2
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
+* **Problema:** El contenedor dependía directamente del tipo concreto `UserRepositoryMySQL` en el ensamblaje de casos de uso, propagando el conocimiento de la implementación concreta y dificultando reemplazar el adaptador de persistencia sin tocar varias líneas del cableado.
+* **Solución:** Se introdujo un ensamblado intermedio tipado por puertos (`UserRepositoryPorts`) y se movió la creación del repositorio concreto al método `buildUserRepositoryPorts(...)`. El wiring de servicios ahora consume únicamente interfaces de puertos, reduciendo el acoplamiento a concreciones y mejorando la refactorabilidad.
+
 
 ## Regla 6: Evitar parámetros booleanos de control (Clean Code)
 
@@ -269,15 +279,6 @@
 * **Archivo:** `EmailNotificationService.java`
 * **Problema:** El método `sendNotificationWithFlag` utilizaba un booleano (`includePassword`) para bifurcar el flujo de ejecución entre dos comportamientos distintos (creación vs actualización).
 * **Solución:** Se eliminó el método con el "Flag Argument". Ahora los consumidores de la clase deben invocar explícitamente `notifyUserCreated` o `notifyUserUpdated`, eliminando efectos secundarios y mejorando la claridad de la API.
-
-
-## Regla 4: Estilo y Naming
-
-### Violación 1
-* **Archivo:** `EmailNotificationService.java`
-* **Problema:** El método privado `renderTemplate` actuaba como una función pura que no utilizaba el estado de la instancia, pero no estaba marcado como `static`.
-* **Solución:** Se añadió el modificador `static` a `renderTemplate` para indicar claramente su independencia del estado de la clase y adherirse a las convenciones de Clean Code en Java.
-
 
 
 ## Regla 7: Evitar efectos secundarios ocultos
@@ -295,13 +296,6 @@
 * **Problema:** El método navegaba profundamente en la estructura interna de `UserModel` encadenando llamadas (`user.getPassword().verifyPlain(plainPassword)`). Esto crea un alto acoplamiento, ya que la capa de aplicación asume y conoce cómo el modelo estructura internamente sus *Value Objects*.
 * **Solución:** Se aplicó la Ley de Deméter (o principio de menor conocimiento) delegando la validación directamente al objeto mediante `user.passwordMatches(plainPassword)`. Ahora el modelo encapsula su estado y la aplicación solo interactúa con su comportamiento expuesto.
 
-
-## Regla 17: Condición booleana compleja
-
-### Violación 1
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/application/service/LoginService.java`
-* **Problema:** El método de validación contenía una expresión booleana redundante y larga (`user.getStatus() != ACTIVE || user.getStatus() == BLOCKED...`) que dificultaba la lectura y la comprensión rápida de la intención.
-* **Solución:** Se simplificó la lógica a una sola comprobación (`!= ACTIVE`) y se extrajo al método privado `ensureUserIsActive()`, mejorando drásticamente la legibilidad (Regla 17) y encapsulando parcialmente la regla de negocio (Regla 12).
 
 ## Regla 10: Eliminar comentarios redundantes y Magic Numbers
 
@@ -374,41 +368,10 @@
 * **Solución:** Se renombró la variable de `val` a `value` y se reemplazó `val == null` por `Objects.isNull(value)`, mejorando tanto la claridad de nombres como el uso de métodos de utilidad.
 
 
-
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserEmailException.java`
-* **Problema:** Los métodos factory contenían mensajes de error hardcodeados directamente como String literals, incluido un String literal dentro de `String.format()`.
-* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_EMAIL_MESSAGE` e `INVALID_FORMAT_MESSAGE`), centralizando los textos de error y facilitando su mantenimiento.
-
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserIdException.java`
-* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente.
-* **Solución:** Se extrajo el mensaje en la constante privada estática `EMPTY_ID_MESSAGE`, aplicando la misma pauta de centralización de textos de error.
-
-### Violación 4
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserNameException.java`
-* **Problema:** Los dos métodos factory contenían mensajes de error hardcodeados directamente, incluido un String literal dentro de `String.format()`.
-* **Solución:** Se extrajeron los mensajes en constantes privadas estáticas (`EMPTY_NAME_MESSAGE` y `TOO_SHORT_MESSAGE`), centralizando los textos y mejorando la mantenibilidad.
-
 ### Violación 5
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserRoleException.java`
-* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
-* **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_ROLE_MESSAGE`.
-
-### Violación 6
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/InvalidUserStatusException.java`
-* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
-* **Solución:** Se extrajo el mensaje en la constante privada estática `INVALID_STATUS_MESSAGE`.
-
-### Violación 7
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserAlreadyExistsException.java`
-* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
-* **Solución:** Se extrajo el mensaje en la constante privada estática `EMAIL_EXISTS_MESSAGE`.
-
-### Violación 8
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/domain/exception/UserNotFoundException.java`
-* **Problema:** El método factory contenía un mensaje de error hardcodeado directamente dentro de `String.format()`.
-* **Solución:** Se extrajo el mensaje en la constante privada estática `USER_NOT_FOUND_MESSAGE`.
+* **Archivo:** `EmailNotificationService.java`
+* **Problema:** El método privado `renderTemplate` actuaba como una función pura que no utilizaba el estado de la instancia, pero no estaba marcado como `static`.
+* **Solución:** Se añadió el modificador `static` a `renderTemplate` para indicar claramente su independencia del estado de la clase y adherirse a las convenciones de Clean Code en Java.
 
 
 ## Regla 9: Separación de responsabilidades en mapeos (Hexagonal)
@@ -514,6 +477,11 @@
 * **Problema:** La construcción de dependencias exigía un orden implícito y frágil (`init()` antes de usar el repositorio). Este acoplamiento temporal no estaba protegido por el diseño y facilitaba usos incorrectos al depender de pasos manuales en secuencia.
 * **Solución:** Se eliminó la llamada explícita a `userRepository.init()` junto con su comentario de violación asociado a Regla 19. Con esto, el flujo de inicialización deja de depender de un paso extra de orden obligatorio en el contenedor y queda más robusto frente a errores de uso.
 
+### Violación 3
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
+* **Problema:** La clase exponía un estado y una API de inicialización (`initialized` e `init()`) que imponían un orden implícito de uso, generando acoplamiento temporal innecesario y un contrato frágil para consumidores.
+* **Solución:** Se eliminaron el flag `initialized`, el método `init()` y sus comentarios de violación asociados. El repositorio queda sin pasos previos obligatorios de inicialización manual, reduciendo el acoplamiento temporal y simplificando su uso.
+
 
 ## Regla 27: Código listo para leer
 
@@ -521,14 +489,6 @@
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
 * **Problema:** El método `printSummary()` usaba una combinación innecesariamente compleja de `Optional`, `stream`, `reduce` y conversiones intermedias para una tarea simple (imprimir resumen o mensaje de vacío), dificultando la lectura y el mantenimiento.
 * **Solución:** Se reescribió `printSummary()` con flujo imperativo claro: validación temprana de lista vacía, construcción explícita del resumen con `StringBuilder` y salida final por consola. También se eliminó la importación de `Optional` y el comentario de violación para dejar el código limpio.
-
-
-## Regla 19: Evitar temporal coupling
-
-### Violación 3
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/adapter/persistence/repository/UserRepositoryMySQL.java`
-* **Problema:** La clase exponía un estado y una API de inicialización (`initialized` e `init()`) que imponían un orden implícito de uso, generando acoplamiento temporal innecesario y un contrato frágil para consumidores.
-* **Solución:** Se eliminaron el flag `initialized`, el método `init()` y sus comentarios de violación asociados. El repositorio queda sin pasos previos obligatorios de inicialización manual, reduciendo el acoplamiento temporal y simplificando su uso.
 
 
 ## Regla 5: Pocos parámetros por función
@@ -539,17 +499,17 @@
 * **Solución:** Se eliminó `saveWithFields(...)` junto con su comentario de violación. El repositorio conserva como API de persistencia el método `save(UserModel)`, que encapsula correctamente los datos del usuario en un único objeto de dominio.
 
 
-## Regla 22: Código fácil de borrar y refactorizar
-
-### Violación 2
-* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/config/DependencyContainer.java`
-* **Problema:** El contenedor dependía directamente del tipo concreto `UserRepositoryMySQL` en el ensamblaje de casos de uso, propagando el conocimiento de la implementación concreta y dificultando reemplazar el adaptador de persistencia sin tocar varias líneas del cableado.
-* **Solución:** Se introdujo un ensamblado intermedio tipado por puertos (`UserRepositoryPorts`) y se movió la creación del repositorio concreto al método `buildUserRepositoryPorts(...)`. El wiring de servicios ahora consume únicamente interfaces de puertos, reduciendo el acoplamiento a concreciones y mejorando la refactorabilidad.
-
-
 ## Regla 16: Evitar condicionales repetitivas
 
 ### Violación 3
 * **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/cli/io/UserResponsePrinter.java`
 * **Problema:** El archivo mantenía comentarios de violación de Regla 16 que describían una cadena condicional extensa, aunque la implementación real ya estaba resuelta con un `Map` de etiquetas. Esta desalineación entre comentario y código introduce ruido y confusión sobre el estado real de la regla.
 * **Solución:** Se eliminaron los comentarios de violación asociados a Regla 16, dejando el código limpio y consistente con la implementación actual basada en `STATUS_LABELS`.
+
+
+## Regla 20: Objeto antes que primitivo
+
+### Violación 1
+* **Archivo:** `src/main/java/com/jcaa/usersmanagement/infrastructure/entrypoint/desktop/controller/UserController.java`
+* **Problema:** El método `findUserById` operaba directamente con un `String` desnudo para el identificador, retrasando la validación semántica de dominio y permitiendo que valores inválidos avanzaran más de lo necesario en el flujo.
+* **Solución:** Se encapsuló el identificador al inicio del método mediante `new UserId(id)` y se utilizó su valor normalizado para construir el query. Con esto, la validación del id ocurre en el borde del método y se reduce el uso directo de primitivos para un concepto de dominio.
